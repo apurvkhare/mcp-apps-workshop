@@ -9,7 +9,7 @@
  * host to see a change. Ctrl+C stops it all. Non-interactive: safe for an agent to run in the background.
  */
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
-import { existsSync, watchFile } from 'node:fs';
+import { existsSync, readdirSync, statSync, watchFile } from 'node:fs';
 import { resolve } from 'node:path';
 
 const args = process.argv.slice(2);
@@ -30,7 +30,10 @@ const bin = (name: string) => resolve('node_modules/.bin', shell ? `${name}.cmd`
 const run = (cmd: string, cmdArgs: string[], env: Record<string, string> = {}, cwd?: string) =>
   spawnSync(cmd, cmdArgs, { stdio: 'inherit', env: { ...process.env, ...env }, cwd, shell });
 
-if (!existsSync('host/dist/index.html') || !existsSync('host/dist/sandbox.html')) {
+// Rebuild the host when it's missing, or older than its source (a `git pull` that changed host/src).
+const mtime = (path: string) => (existsSync(path) ? statSync(path).mtimeMs : 0);
+const hostSource = Math.max(mtime('host/index.html'), ...readdirSync('host/src').map((f) => mtime(`host/src/${f}`)));
+if (Math.min(mtime('host/dist/index.html'), mtime('host/dist/sandbox.html')) < hostSource) {
   console.log('Building the workshop host …');
   for (const input of ['index.html', 'sandbox.html']) {
     if (run('npx', ['vite', 'build'], { INPUT: input, NODE_ENV: 'development' }, 'host').status !== 0) process.exit(1);
@@ -59,7 +62,8 @@ if (!remote) startApp();
 const host = spawn(bin('tsx'), ['serve.ts'], {
   stdio: 'inherit',
   cwd: 'host',
-  env: { ...process.env, SERVERS: JSON.stringify([remote ?? `http://localhost:${port}/mcp`]) },
+  // APP_DIR tells the host's guide pane what to show: the playground's step, or the finished app.
+  env: { ...process.env, APP_DIR: appDir, SERVERS: JSON.stringify([remote ?? `http://localhost:${port}/mcp`]) },
   shell
 });
 host.on('exit', (code) => code && !stopping && stop());

@@ -35,6 +35,8 @@ npm run go next     # on to the next step
 
 Each step's `README.md` (also copied into `playground/`) has the task, how it works, what to look for in the protocol log, and "Explain it back" questions.
 
+The workshop host shows that README in its **Guide** pane, on the left of the live view and the protocol log, and switches to the new step by itself when you run `npm run go`.
+
 Stuck? Read the 💡 hints in the code, then `npm run diff` to compare with the solution, then `npm run solution` to copy it in. Your own version is backed up to `.playground-backups/` first.
 
 ### The markers
@@ -82,5 +84,5 @@ For workshop authors: `npm run cut` regenerates every exercise folder and `app/`
 | `app/ui/data.ts` · `chat.ts` | Every call the view makes: to the server, and to the conversation |
 | `app/ui/host-bridge.ts` | Maps the host's theme variables onto tenet-ui tokens |
 | `shared/` | The expense store, the presentational components, and test helpers. Not MCP code, shared by every step |
-| `host/` | The workshop host, based on the official SDK's `basic-host` example, with a protocol log, a conversation pane and theme presets |
+| `host/` | The workshop host, based on the official SDK's `basic-host` example, with the step's guide, a protocol log, a conversation pane and theme presets |
 | `scripts/` | The commands above. `scripts/authoring/` holds the source every step is cut from |

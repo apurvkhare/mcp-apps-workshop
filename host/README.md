@@ -1,4 +1,13 @@
-> Vendored from [modelcontextprotocol/ext-apps](https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host) (examples/basic-host, commit 82221c0), under the license in `LICENSE-ext-apps`. It will be extended into the workshop host: a conversation pane, a protocol log, and theme presets.
+> Vendored from [modelcontextprotocol/ext-apps](https://github.com/modelcontextprotocol/ext-apps/tree/main/examples/basic-host) (examples/basic-host, commit 82221c0), under the license in `LICENSE-ext-apps`. It is extended into the workshop host: a guide pane, a conversation pane, a protocol log, and theme presets. Changes are marked "Workshop".
+
+## Workshop additions
+
+- **Guide** ([`src/Guide.tsx`](src/Guide.tsx), [`src/markdown.ts`](src/markdown.ts)): the current step's `playground/README.md`, rendered next to the host, with the step's id and title, problem or solution, a strip of every step, and copyable commands. Picking another step shows `npm run go <step>` to copy; it never runs anything. `serve.ts` serves it at `GET /api/guide` and sends `changed` on the `GET /api/guide/events` stream (server-sent events) when `.step.json` or the README changes, so `npm run go` updates the pane without a reload. With `npm start -- --app app` (`APP_DIR=app`) it describes the finished app. The **Guide** button in the toolbar hides it. `markdown.ts` is a small escaping renderer for what the READMEs use, so there's no Markdown dependency.
+- **Conversation** (in `src/index.tsx`, [`src/conversation.ts`](src/conversation.ts)): tool calls, `ui/message` and `ui/update-model-context` from the views.
+- **Protocol log** ([`src/ProtocolLog.tsx`](src/ProtocolLog.tsx), [`src/protocol-log.ts`](src/protocol-log.ts)): every JSON-RPC message on both connections.
+- **Theme presets** ([`src/presets.ts`](src/presets.ts)): host style variables that imitate other hosts.
+
+Layout: from 1700px wide, guide, chat, views and log sit side by side. Below that, the log moves under the views. Below 900px, everything stacks.
 
 # Example: Basic Host
 

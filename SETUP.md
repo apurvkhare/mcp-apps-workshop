@@ -34,7 +34,7 @@ npm may list packages such as `esbuild` and `workerd` whose install scripts it d
 npm start -- --app app
 ```
 
-Open [http://localhost:8080](http://localhost:8080), pick `get_summary`, and press **Call Tool**. You should see a spending dashboard, and messages in the protocol log on the right. Press `Ctrl+C` to stop.
+Open [http://localhost:8080](http://localhost:8080), pick `get_summary`, and press **Call Tool**. You should see a spending dashboard, and messages in the protocol log. The **Guide** pane on the left describes the finished app; during the workshop it shows the current step's instructions. Press `Ctrl+C` to stop.
 
 ## If you'll use an agent
 

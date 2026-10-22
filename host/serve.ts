@@ -6,6 +6,8 @@
  *
  * Running on separate ports ensures proper origin isolation for security.
  *
+ * Workshop: the host server also serves the guide pane's data (the playground's step and its README).
+ *
  * Security: CSP is set via HTTP headers based on ?csp= query param.
  * This ensures content cannot tamper with CSP (unlike meta tags).
  */
@@ -15,6 +17,9 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import type { McpUiResourceCsp } from "@modelcontextprotocol/ext-apps";
+import { watchFile } from "fs";
+import { readFile } from "fs/promises";
+import { findStep, PLAYGROUND, readState, STATE_FILE, STEPS } from "../scripts/steps.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -44,6 +49,63 @@ hostApp.use(express.static(DIRECTORY));
 // API endpoint to get configured server URLs
 hostApp.get("/api/servers", (_req, res) => {
   res.json(SERVERS);
+});
+
+// Workshop: the guide pane. GET /api/guide is the step in playground/ and its README; GET /api/guide/events
+// is a server-sent event stream that says "changed" when `npm run go` loads another step or the README is
+// edited. The browser then fetches /api/guide again. `npm start -- --app app` sets APP_DIR=app.
+const APP_DIR = process.env.APP_DIR ?? "playground";
+const README = join(PLAYGROUND, "README.md");
+
+const FINISHED_APP = `# The finished app
+
+This is \`app/\`, the last step's solution, running as is. Pick \`get_summary\` or \`list_expenses\` and press **Call Tool** to see the dashboard.
+
+To build it yourself one step at a time, stop this with Ctrl+C, then:
+
+\`\`\`bash
+npm run go 2.1
+npm start
+\`\`\``;
+
+async function readText(path: string): Promise<string | null> {
+  return readFile(path, "utf8").catch(() => null);
+}
+
+async function guide() {
+  const steps = STEPS.map((s) => ({ id: s.id, title: s.title, section: s.section.n, sectionTitle: s.section.title }));
+  if (APP_DIR !== "playground") return { mode: "app" as const, steps, readme: FINISHED_APP };
+  const state = await readState();
+  const step = state && findStep(state.step);
+  if (!state || !step) return { mode: "empty" as const, steps };
+  return {
+    mode: "step" as const,
+    steps,
+    step: { id: step.id, title: step.title, kind: state.kind, section: step.section.n, sectionTitle: step.section.title },
+    readme: await readText(README),
+    sectionReadme: await readText(join(step.sectionDir, "README.md")),
+  };
+}
+
+hostApp.get("/api/guide", async (_req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json(await guide());
+});
+
+const guideClients = new Set<express.Response>();
+const notifyGuide = () => {
+  for (const client of guideClients) client.write("data: changed\n\n");
+};
+// `npm run go` writes .step.json last, once the new README is in place. Polling also notices the
+// playground being deleted, which fs.watch doesn't.
+watchFile(STATE_FILE, { interval: 500 }, notifyGuide);
+watchFile(README, { interval: 500 }, notifyGuide);
+
+hostApp.get("/api/guide/events", (req, res) => {
+  res.writeHead(200, { "Content-Type": "text/event-stream", "Cache-Control": "no-store", Connection: "keep-alive" });
+  res.write("retry: 1000\n\n");
+  guideClients.add(res);
+  req.on("close", () => guideClients.delete(res));
 });
 
 hostApp.get("/", (_req, res) => {

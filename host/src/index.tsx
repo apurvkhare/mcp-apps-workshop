@@ -8,6 +8,7 @@ import styles from "./index.module.css";
 import * as conversation from "./conversation";
 import { PRESETS, getPreset, onPresetChange, setPreset, type PresetId } from "./presets";
 import { ProtocolLog } from "./ProtocolLog";
+import { Guide } from "./Guide";
 
 /**
  * Check if a tool is visible to the model (not app-only).
@@ -107,12 +108,34 @@ function PresetSelect() {
 }
 
 
+/** Workshop: whether the guide pane is open. Remembered per browser. */
+function useGuideOpen(): [boolean, (open: boolean) => void] {
+  const [open, setOpen] = useState(() => {
+    try {
+      return localStorage.getItem("workshop.guide") !== "closed";
+    } catch {
+      return true;
+    }
+  });
+  const set = (next: boolean) => {
+    setOpen(next);
+    try {
+      localStorage.setItem("workshop.guide", next ? "open" : "closed");
+    } catch {
+      // Private windows may refuse storage. The pane still toggles.
+    }
+  };
+  return [open, set];
+}
+
+
 /**
- * Workshop layout: the chat stand-in on the left, the tool calls and their views in the middle,
+ * Workshop layout: the step's guide on the left, then the chat stand-in, the tool calls and their views,
  * and the protocol log on the right.
  */
 function Host({ serversPromise }: HostProps) {
   const [toolCalls, setToolCalls] = useState<ToolCallEntry[]>([]);
+  const [guideOpen, setGuideOpen] = useGuideOpen();
   const [destroyingIds, setDestroyingIds] = useState<Set<number>>(new Set());
   const queryParams = useMemo(() => getQueryParams(), []);
 
@@ -130,12 +153,20 @@ function Host({ serversPromise }: HostProps) {
   };
 
   return (
-    <div className={styles.workshop}>
+    <div className={styles.workshop} data-guide={guideOpen ? "open" : "closed"}>
       <header className={styles.toolbar}>
+        <button type="button" className={styles.guideToggle} aria-pressed={guideOpen} aria-controls="guide" onClick={() => setGuideOpen(!guideOpen)} title={guideOpen ? "Hide the guide" : "Show the guide"}>
+          Guide
+        </button>
         <strong className={styles.brand}>MCP Apps workshop host</strong>
         <PresetSelect />
         {!queryParams.hideThemeToggle && <ThemeToggle />}
       </header>
+      {guideOpen && (
+        <aside id="guide" className={styles.guideColumn}>
+          <Guide />
+        </aside>
+      )}
       <aside className={styles.chatColumn}>
         <CallToolPanel
           serversPromise={serversPromise}
