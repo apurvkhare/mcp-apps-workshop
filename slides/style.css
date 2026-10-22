@@ -597,12 +597,16 @@
 .cmd::before { content: '$ '; color: var(--accent-text); }
 .steps { display: grid; gap: 0.5rem; }
 .steps > div {
-  display: grid; grid-template-columns: 4.2rem 1fr auto; gap: 0.8rem; align-items: baseline;
+  display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: 0.15rem 0.8rem; align-items: baseline;
   padding: 0.5rem 0.8rem; background: var(--ink-surface-2); border: 1px solid var(--ink-line);
   border-radius: var(--r-md); font-size: 0.88rem;
 }
 .steps .n { font-family: var(--font-mono); color: var(--accent-text); font-weight: 500; white-space: nowrap; }
-.steps .w { font-family: var(--font-mono); font-size: 0.72rem; color: var(--paper-dim); }
+.steps .w { font-family: var(--font-mono); font-size: 0.72rem; color: var(--paper-dim); grid-column: 2; }
+.steps code { overflow-wrap: anywhere; }
+
+/* grid columns never grow past their share, so side-by-side boxes can't overlap */
+.slidev-layout .grid > * { min-width: 0; }
 
 /* marker legend */
 .markers { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.2rem; }
