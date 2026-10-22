@@ -17,9 +17,9 @@ npm run doctor
 
 ## With an AI agent
 
-[AGENTS.md](AGENTS.md) tells your agent how the workshop works: one step at a time, only in `playground/`, no peeking at solutions, and an explanation of what it wrote at the end. Claude Code and Gemini CLI read it through `CLAUDE.md` and `GEMINI.md`. Cursor, Copilot and Codex read it directly.
+[AGENTS.md](AGENTS.md) tells your agent how the workshop works: one step at a time, only in `playground/`, no peeking at solutions, and an explanation of what it wrote at the end. Cursor, Copilot, Codex and Antigravity read it directly, and Claude Code reads it through `CLAUDE.md`.
 
-Say "do step 3.3", or use the shortcut: `/step 3.3` in Claude Code, Copilot Chat and Gemini CLI.
+Say "do step 3.3", or use the shortcut: `/step 3.3` in Claude Code and Copilot Chat.
 
 ## How the workshop works
 

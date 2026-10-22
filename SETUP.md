@@ -8,7 +8,7 @@ Do this a few days before the workshop, on a network you trust. It takes about 1
 - **git**, to clone the repo.
 - **A laptop where ports 3001, 8080 and 8081 are free.** The server, the workshop host and its sandbox use them.
 - **A code editor.**
-- **An AI coding agent, optional.** Claude Code, GitHub Copilot, Cursor, Codex, Gemini CLI or any other. The exercises work with or without one.
+- **An AI coding agent, optional.** Claude Code, GitHub Copilot, Cursor, Codex, Antigravity or any other. The exercises work with or without one.
 - **A free Cloudflare account, optional,** for the deploy in section 6. No card is needed. Without one, you can watch that part.
 
 No paid accounts and no API keys. Nothing in the workshop calls a model: the local host lets you play the model yourself.
@@ -38,7 +38,7 @@ Open [http://localhost:8080](http://localhost:8080), pick `get_summary`, and pre
 
 ## If you'll use an agent
 
-Open the repo in it once before the day, so it picks up `AGENTS.md`. That file keeps the agent to one step at a time, and has it explain its code. Try `/step` (Claude Code, Copilot, Gemini CLI) or "do step 2.1" in any other agent, then reset with `npm run go 2.1`.
+Open the repo in it once before the day, so it picks up `AGENTS.md`. That file keeps the agent to one step at a time, and has it explain its code. Try `/step` (Claude Code, Copilot) or "do step 2.1" in any other agent, then reset with `npm run go 2.1`.
 
 ## Before you leave home
 

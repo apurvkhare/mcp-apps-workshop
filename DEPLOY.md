@@ -89,13 +89,7 @@ Start the server from the file, or with **MCP: List Servers**, then ask in Copil
 claude mcp add --transport http expensify YOUR_URL
 ```
 
-### Gemini CLI
-
-```bash
-gemini mcp add --transport http expensify YOUR_URL
-```
-
-The Claude Code and Gemini CLI tool calls work in a terminal. Whether either one renders the view, and not just the text, is to be checked in the dry run.
+The Claude Code tool calls work in a terminal. Whether it renders the view, and not just the text, is to be checked in the dry run.
 
 ## Taking it further
 
