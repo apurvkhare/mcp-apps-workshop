@@ -9,7 +9,11 @@ const url = new URL(process.argv[2] ?? 'http://localhost:3001/mcp');
 const client = new Client(
   { name: 'workshop-smoke', version: '1.0.0' },
   // Say we render MCP Apps, as a real host would.
-  { capabilities: { extensions: { 'io.modelcontextprotocol/ui': { mimeTypes: ['text/html;profile=mcp-app'] } } } }
+  {
+    capabilities: { extensions: { 'io.modelcontextprotocol/ui': { mimeTypes: ['text/html;profile=mcp-app'] } } },
+    // Protocol 2026-07-28 only: fails loudly if the server can't speak it.
+    versionNegotiation: { mode: { pin: '2026-07-28' } }
+  }
 );
 
 let failed = 0;
