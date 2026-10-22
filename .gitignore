@@ -6,3 +6,4 @@ dist/
 .dev.vars
 playground/
 .playground-backups/
+.vitest/

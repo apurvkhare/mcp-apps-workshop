@@ -21,6 +21,7 @@ export const textOf = (result: CallToolResult) => result.content.flatMap((c) => 
 /** Drop empty values: the tool schemas treat a missing field as "no filter", but reject "". */
 const clean = (args: Record<string, unknown>) => Object.fromEntries(Object.entries(args).filter(([, v]) => v !== undefined && v !== ''));
 
+// ✅ 4.1 getSummary and listExpenses call the server through the host.
 export async function getSummary(app: App, range: DateRange, groupBy: GroupBy): Promise<Summary> {
   const result = await app.callServerTool({ name: 'get_summary', arguments: clean({ ...range, groupBy }) });
   if (result.isError || !isSummary(result.structuredContent)) throw new Error(textOf(result) || 'get_summary returned no data.');

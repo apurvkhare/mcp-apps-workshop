@@ -51,6 +51,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
 
   // ------------------------------------------------------------------ tools
 
+  // ✅ 2.2 get_summary is an app tool: hosts render the view under its result.
   registerAppTool(
     server,
     'get_summary',
@@ -126,7 +127,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
     }
   );
 
-  // Hidden from the model: only the view can call it, from the Delete button on a row.
+  // ✅ 4.3 delete_expense is app-only: the view's Delete button calls it, the model never sees it.
   registerAppTool(
     server,
     'delete_expense',
@@ -138,7 +139,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
       _meta: { ui: { resourceUri: VIEW_URI, visibility: ['app'] } }
     },
     async ({ id }) => {
-      // Never trust the view: the server checks everything a model-called tool would check.
+      // Never trust the caller: the server checks everything, whoever made the call.
       const removed = store.remove(id);
       return removed ? text(`Deleted ${expenseLine(removed)}`) : fail(`No expense with id ${id}.`);
     }
@@ -146,7 +147,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
 
   // -------------------------------------------------------------- resources
 
-  // The view itself. registerAppResource sets the MIME type to text/html;profile=mcp-app.
+  // ✅ 2.1 The view, served as a ui:// resource with the MCP App MIME type.
+  // registerAppResource defaults the MIME type to text/html;profile=mcp-app in resources/list.
   registerAppResource(
     server,
     'Expenses dashboard',
@@ -158,6 +160,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
           uri: VIEW_URI,
           mimeType: RESOURCE_MIME_TYPE,
           text: await viewHtml(),
+          // ✅ 5.3 The font's two origins, declared for the sandbox's CSP.
           // The sandbox blocks every network request unless it is declared here.
           // The view loads one web font, so it declares the two Google Fonts origins and nothing else.
           _meta: { ui: { csp: { resourceDomains: ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'] }, prefersBorder: false } }

@@ -8,7 +8,7 @@
  */
 import type { McpUiHostContext, McpUiStyleVariableKey } from '@modelcontextprotocol/ext-apps';
 
-const TOKEN_MAP: Record<string, McpUiStyleVariableKey> = {
+export const TOKEN_MAP: Record<string, McpUiStyleVariableKey> = {
   '--bgColor-default': '--color-background-primary',
   '--bgColor-muted': '--color-background-secondary',
   '--bgColor-inset': '--color-background-tertiary',
@@ -29,6 +29,7 @@ const TOKEN_MAP: Record<string, McpUiStyleVariableKey> = {
 export function bridgeHostTheme(context: McpUiHostContext | undefined, root = document.documentElement): void {
   // tenet-ui switches palettes with data-color-mode; the host tells us light or dark in context.theme.
   root.dataset.colorMode = context?.theme ?? 'light';
+  // ✅ 5.2 Each tenet-ui token follows the host's variable when the host sent one.
   const sent: Partial<Record<McpUiStyleVariableKey, string>> = context?.styles?.variables ?? {};
   for (const [token, hostVar] of Object.entries(TOKEN_MAP)) {
     if (sent[hostVar]) root.style.setProperty(token, `var(${hostVar})`);
