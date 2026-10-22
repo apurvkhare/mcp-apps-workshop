@@ -259,7 +259,7 @@ Ask: "Who has used an MCP server? Who has written one?" Calibrate speed from the
 
 # Host, client and server: who runs what
 
-<img src="/mcp-roles.svg" class="diagram" style="max-height: 230px" alt="The host (Claude, ChatGPT, VS Code, the workshop host) holds the model and one MCP client per server. One client sends tools/call to the Expensify server on localhost:3001/mcp; another speaks JSON-RPC to another server." />
+<ZoomDiagram src="/mcp-roles.svg" height="230px" alt="The host (Claude, ChatGPT, VS Code, the workshop host) holds the model and one MCP client per server. One client sends tools/call to the Expensify server on localhost:3001/mcp; another speaks JSON-RPC to another server." />
 
 <div class="grid grid-cols-3 gap-4 mt-5 text-sm">
   <div class="ed-card"><div class="kicker">Host</div><div class="mt-1">The AI app the user sees. It owns the model and the UI.</div></div>
@@ -377,7 +377,7 @@ The notification is one the view gets in section 3. Between host and view you'll
 
 # Lifecycle step 1 (2026-07-28): server/discover
 
-<img src="/mcp-lifecycle-discover.svg" class="diagram" style="max-height: 400px; width: 100%" alt="Sequence: the client sends server/discover and gets back supportedVersions, capabilities and serverInfo. One request, one answer, no handshake to finish." />
+<ZoomDiagram src="/mcp-lifecycle-discover.svg" height="400px" alt="Sequence: the client sends server/discover and gets back supportedVersions, capabilities and serverInfo. One request, one answer, no handshake to finish." />
 
 <div class="text-sm text-center mt-2"><code>server/discover</code> asks what the server supports. One request, one answer.</div>
 
@@ -393,7 +393,7 @@ Discover is optional for a client that already knows the server, but every SDK c
 <div class="grid grid-cols-5 gap-6 items-center">
 
 <div class="col-span-3">
-<img src="/mcp-lifecycle-requests.svg" class="diagram" style="max-height: 450px" alt="Sequence: any request, in any order: tools/list returns tools with _meta.ui.resourceUri, tools/call get_summary returns content and structuredContent, resources/read and prompts/get return contents and messages. No session id; any instance can answer." />
+<ZoomDiagram src="/mcp-lifecycle-requests.svg" height="420px" alt="Sequence: any request, in any order: tools/list returns tools with _meta.ui.resourceUri, tools/call get_summary returns content and structuredContent, resources/read and prompts/get return contents and messages. No session id; any instance can answer." />
 </div>
 
 <div class="col-span-2 text-sm space-y-3">
@@ -872,7 +872,7 @@ Optional mention: getUiCapability(clientCapabilities) from ext-apps/server tells
 
 # How the host finds, reads and mounts the view
 
-<img src="/host-mounts-view.svg" class="diagram" style="max-height: 410px" alt="Sequence: at connect the workshop host sends server/discover and tools/list to the Expensify server, and learns get_summary has _meta.ui.resourceUri. You call get_summary; the host sends tools/call, then resources/read ui://expensify/dashboard.html, gets text/html;profile=mcp-app, and mounts it in the sandbox. The view shows Waiting for the host." />
+<ZoomDiagram src="/host-mounts-view.svg" height="410px" alt="Sequence: at connect the workshop host sends server/discover and tools/list to the Expensify server, and learns get_summary has _meta.ui.resourceUri. You call get_summary; the host sends tools/call, then resources/read ui://expensify/dashboard.html, gets text/html;profile=mcp-app, and mounts it in the sandbox. The view shows Waiting for the host." />
 
 <!--
 0:30. Fill time starts after this slide. Put this slide back up while they work.
@@ -1012,7 +1012,7 @@ class: dense
 
 # Render, part 1: call the tool, mount the view
 
-<img src="/lifecycle-render-host.svg" class="diagram" style="max-height: 420px; width: 100%" alt="Sequence: at connect the host sends server/discover and tools/list. The user asks how much they spent; the host calls get_summary, reads the ui:// view resource, and mounts the view in a sandbox." />
+<ZoomDiagram src="/lifecycle-render-host.svg" height="420px" alt="Sequence: at connect the host sends server/discover and tools/list. The user asks how much they spent; the host calls get_summary, reads the ui:// view resource, and mounts the view in a sandbox." />
 
 <!--
 0:42. Walk it top to bottom. Everything on this slide is host to server, MCP 2026-07-28, and section 2 already set it up.
@@ -1023,7 +1023,7 @@ The host reads the view from tools/list's _meta.ui.resourceUri, fetches it with 
 
 # Render, part 2: the view connects, gets the data
 
-<img src="/lifecycle-render-view.svg" class="diagram" style="max-height: 420px; width: 100%" alt="Sequence: the view sends ui/initialize (3.1), receives tool-input (3.2), the server's content and structuredContent reach the host, the view receives tool-result (3.3), then host-context-changed any time after (3.4)." />
+<ZoomDiagram src="/lifecycle-render-view.svg" height="420px" alt="Sequence: the view sends ui/initialize (3.1), receives tool-input (3.2), the server's content and structuredContent reach the host, the view receives tool-result (3.3), then host-context-changed any time after (3.4)." />
 
 <!--
 0:43. Now view to host, the MCP Apps side. Name the step that handles each arrow.
@@ -1285,7 +1285,7 @@ layout: section
 
 # A click's tools/call goes view, host, server
 
-<img src="/request-path.svg" class="diagram" style="max-height: 300px" alt="Sequence: you pick This month in the view; the view sends tools/call get_summary to the host with id 3; the host may refuse; the host sends its own tools/call get_summary to the Expensify server with id 7; the result comes back with id 7, and the host answers the view with id 3." />
+<ZoomDiagram src="/request-path.svg" height="300px" alt="Sequence: you pick This month in the view; the view sends tools/call get_summary to the host with id 3; the host may refuse; the host sends its own tools/call get_summary to the Expensify server with id 7; the result comes back with id 7, and the host answers the view with id 3." />
 
 <div v-click class="big-line big-line--sm mt-6 text-center">No model in this loop. <em>No tokens, no turn.</em></div>
 
@@ -1464,7 +1464,7 @@ class: dense
 
 # Every message the view sends in section 4
 
-<img src="/lifecycle-interact.svg" class="diagram" style="max-height: 400px" alt="Sequence: the user picks This month and the view calls get_summary through the host. The user clicks Ask and the view sends ui/message. The user clicks Delete, the view calls the app-only delete_expense, and updates the model context." />
+<ZoomDiagram src="/lifecycle-interact.svg" height="400px" alt="Sequence: the user picks This month and the view calls get_summary through the host. The user clicks Ask and the view sends ui/message. The user clicks Delete, the view calls the app-only delete_expense, and updates the model context." />
 
 <!--
 1:43. The whole section on one picture, after they've written it. The model is in exactly one place: the ui/message. Everything else is view, host, server.
@@ -1782,7 +1782,7 @@ export default {
 
 <div class="col-span-2">
 
-<img src="/server-entries.svg" class="diagram" style="max-height: 230px" alt="createServer in server.ts feeds createMcpHandler, Request in and Response out, which both http.ts on Node port 3001 and worker.ts on Cloudflare Workers call with fetch." />
+<ZoomDiagram src="/server-entries.svg" height="230px" alt="createServer in server.ts feeds createMcpHandler, Request in and Response out, which both http.ts on Node port 3001 and worker.ts on Cloudflare Workers call with fetch." />
 
 <div class="mt-2 text-sm space-y-2">
   <div class="ed-card"><b>Stateless</b> Streamable HTTP: any instance, anywhere, can answer any request.</div>
