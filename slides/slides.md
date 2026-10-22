@@ -375,25 +375,36 @@ The notification is one the view gets in section 3. Between host and view you'll
 
 ---
 
-# The 2026-07-28 lifecycle: discover, then requests
+# Lifecycle step 1 (2026-07-28): server/discover
+
+<img src="/mcp-lifecycle-discover.svg" class="diagram" style="max-height: 400px; width: 100%" alt="Sequence: the client sends server/discover and gets back supportedVersions, capabilities and serverInfo. One request, one answer, no handshake to finish." />
+
+<div class="text-sm text-center mt-2"><code>server/discover</code> asks what the server supports. One request, one answer.</div>
+
+<!--
+0:09. The whole lifecycle of protocol 2026-07-28 is two steps, one per slide. This is the first.
+Discover is optional for a client that already knows the server, but every SDK client does it at connect. There's no negotiation phase to remember and nothing to finish before the first real request.
+-->
+
+---
+
+# Lifecycle step 2: every request carries its _meta
 
 <div class="grid grid-cols-5 gap-6 items-center">
 
 <div class="col-span-3">
-<img src="/mcp-lifecycle.svg" class="diagram" style="max-height: 370px" alt="Sequence: the client sends server/discover and gets back supportedVersions, capabilities and serverInfo. Then any request, in any order, each with its own _meta: tools/list returns tools with _meta.ui.resourceUri, tools/call get_summary returns content and structuredContent, resources/read and prompts/get return contents and messages. No handshake, no session id." />
+<img src="/mcp-lifecycle-requests.svg" class="diagram" style="max-height: 450px" alt="Sequence: any request, in any order: tools/list returns tools with _meta.ui.resourceUri, tools/call get_summary returns content and structuredContent, resources/read and prompts/get return contents and messages. No session id; any instance can answer." />
 </div>
 
 <div class="col-span-2 text-sm space-y-3">
-  <div class="ed-card"><div class="kicker">1 · Discover</div><div class="mt-1"><code>server/discover</code> asks what the server supports. One request, one answer.</div></div>
-  <div class="ed-card"><div class="kicker">2 · Any request</div><div class="mt-1">Each request carries the protocol version and the client's capabilities in its own <code>_meta</code>.</div></div>
+  <div class="ed-card"><div class="kicker">Any request, any order</div><div class="mt-1">Each request carries the protocol version and the client's capabilities in its own <code>_meta</code>.</div></div>
   <div class="ed-card ed-card--accent"><div class="kicker">MCP Apps switches on here</div><div class="mt-1">The client lists the <code>io.modelcontextprotocol/ui</code> extension in those capabilities. On every request.</div></div>
 </div>
 
 </div>
 
 <!--
-0:09. The whole lifecycle of protocol 2026-07-28 in two steps. Discover is optional for a client that already knows the server, but every SDK client does it at connect.
-There's no negotiation phase to remember and nothing to clean up: the server holds no state about the client between requests. That's why the same code runs on Workers.
+0:10. Nothing to clean up: the server holds no state about the client between requests. That's why the same code runs on Workers, where any instance can answer.
 MCP Apps rides on capabilities: a host that can render views says so with the io.modelcontextprotocol/ui extension. Next slide shows it, in the real bytes.
 -->
 
@@ -999,17 +1010,27 @@ Say the yellow card out loud: people who read the MCP changelog will ask "didn't
 class: dense
 ---
 
-# From the user's question to the rendered view
+# Render, part 1: call the tool, mount the view
 
-<img src="/lifecycle-render.svg" class="diagram" style="max-height: 430px" alt="Sequence: at connect the host lists tools. The user asks; the host calls get_summary, reads the view, mounts it, the view initializes, receives tool-input, then tool-result, and host-context-changed any time after." />
+<img src="/lifecycle-render-host.svg" class="diagram" style="max-height: 420px; width: 100%" alt="Sequence: at connect the host sends server/discover and tools/list. The user asks how much they spent; the host calls get_summary, reads the ui:// view resource, and mounts the view in a sandbox." />
 
 <!--
-0:42. Walk it top to bottom, and name the step that handles each arrow.
-1. Mount: the host does not wait for the result. The view can show a loading state.
-2. Handshake: ui/initialize (3.1), the host answers with hostContext and capabilities, the view sends ui/notifications/initialized. This is the MCP Apps handshake (spec 2026-01-26), view to host. Host to server there is none: that leg is MCP 2026-07-28.
-3. tool-input (3.2): the arguments the model chose. Can arrive before the server answers.
-4. tool-result (3.3): the same result the server sent the host.
-5. host-context-changed (3.4): any time later. Theme flip, resize, display mode.
+0:42. Walk it top to bottom. Everything on this slide is host to server, MCP 2026-07-28, and section 2 already set it up.
+The host reads the view from tools/list's _meta.ui.resourceUri, fetches it with resources/read, and mounts it. It does not wait for the tool result: the view can show a loading state.
+-->
+
+---
+
+# Render, part 2: the view connects, gets the data
+
+<img src="/lifecycle-render-view.svg" class="diagram" style="max-height: 420px; width: 100%" alt="Sequence: the view sends ui/initialize (3.1), receives tool-input (3.2), the server's content and structuredContent reach the host, the view receives tool-result (3.3), then host-context-changed any time after (3.4)." />
+
+<!--
+0:43. Now view to host, the MCP Apps side. Name the step that handles each arrow.
+1. Handshake: ui/initialize (3.1), the host answers with hostContext and capabilities, the view sends ui/notifications/initialized. This is the MCP Apps handshake (spec 2026-01-26), view to host. Host to server there is none: that leg is MCP 2026-07-28.
+2. tool-input (3.2): the arguments the model chose. Can arrive before the server answers.
+3. tool-result (3.3): the same result the server sent the host.
+4. host-context-changed (3.4): any time later. Theme flip, resize, display mode.
 -->
 
 ---

@@ -1,0 +1,9 @@
+...@_style
+shape: sequence_diagram
+
+client: "Client\n(in the host)" {class: actor}
+mcp: "Expensify server" {class: ours}
+
+client -> mcp: "server/discover" {class: key}
+mcp -> client: "supportedVersions · capabilities · serverInfo" {class: msg}
+mcp.n: "One request, one answer.\nNo handshake to finish." {class: note}

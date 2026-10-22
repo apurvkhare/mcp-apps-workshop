@@ -1,0 +1,13 @@
+...@_style
+shape: sequence_diagram
+
+user: "You" {class: actor}
+host: "Host" {class: actor}
+mcp: "Expensify server" {class: ours}
+view: "View (iframe)" {class: ours}
+
+host -> mcp: "at connect: server/discover · tools/list" {class: msg}
+user -> host: "How much did I spend?" {class: msg}
+host -> mcp: "tools/call get_summary" {class: msg}
+host -> mcp: "resources/read ui://…/dashboard.html" {class: msg}
+host -> view: "mount in a sandbox" {class: key}

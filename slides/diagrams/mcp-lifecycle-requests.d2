@@ -1,0 +1,13 @@
+...@_style
+shape: sequence_diagram
+
+client: "Client\n(in the host)" {class: actor}
+mcp: "Expensify server" {class: ours}
+
+client -> mcp: "tools/list" {class: key}
+mcp -> client: "tools, with _meta.ui.resourceUri" {class: msg}
+client -> mcp: "tools/call get_summary" {class: key}
+mcp -> client: "content + structuredContent" {class: msg}
+client -> mcp: "resources/read · prompts/get" {class: key}
+mcp -> client: "contents · messages" {class: msg}
+mcp.n: "No session id.\nAny instance can answer." {class: note}
