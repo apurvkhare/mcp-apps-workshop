@@ -53,6 +53,15 @@ const RESOURCE_READY_NOTIFICATION: McpUiSandboxResourceReadyNotification["method
 const PROXY_READY_NOTIFICATION: McpUiSandboxProxyReadyNotification["method"] =
   "ui/notifications/sandbox-proxy-ready";
 
+// Workshop addition: report CSP violations to the host's protocol log.
+// A blocked request only shows up inside the iframe that made it, so a tiny script goes first in the
+// view's <head> and posts each violation out as a notification. It is not part of the MCP Apps spec.
+const CSP_REPORTER = `<script>addEventListener("securitypolicyviolation",function(e){parent.postMessage({jsonrpc:"2.0",method:"workshop/csp-violation",params:{blockedURI:e.blockedURI,directive:e.effectiveDirective,policy:e.originalPolicy}},"*")});</script>`;
+
+function withCspReporter(html: string): string {
+  return /<head[^>]*>/i.test(html) ? html.replace(/<head[^>]*>/i, (head) => head + CSP_REPORTER) : CSP_REPORTER + html;
+}
+
 // Message relay: This Sandbox (outer iframe) acts as a bidirectional bridge,
 // forwarding messages between:
 //
@@ -84,7 +93,7 @@ window.addEventListener("message", async (event) => {
     }
 
     if (event.data && event.data.method === RESOURCE_READY_NOTIFICATION) {
-      const { html, sandbox, permissions } = event.data.params;
+      let { html, sandbox, permissions } = event.data.params;
       if (typeof sandbox === "string") {
         inner.setAttribute("sandbox", sandbox);
       }
@@ -95,6 +104,7 @@ window.addEventListener("message", async (event) => {
         inner.setAttribute("allow", allowAttribute);
       }
       if (typeof html === "string") {
+        html = withCspReporter(html);
         // Use document.write instead of srcdoc (which the CesiumJS Map won't work with)
         const doc = inner.contentDocument || inner.contentWindow?.document;
         if (doc) {

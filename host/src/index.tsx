@@ -1,10 +1,13 @@
 import { getToolUiResourceUri, McpUiToolMetaSchema } from "@modelcontextprotocol/ext-apps/app-bridge";
 import type { Tool } from "@modelcontextprotocol/client";
-import { Component, type ErrorInfo, type ReactNode, StrictMode, Suspense, use, useEffect, useMemo, useRef, useState } from "react";
+import { Component, type ErrorInfo, type ReactNode, StrictMode, Suspense, use, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { createRoot } from "react-dom/client";
-import { callTool, connectToServer, hasAppHtml, initializeApp, loadSandboxProxy, log, newAppBridge, type ServerInfo, type ToolCallInfo, type ModelContext, type AppMessage } from "./implementation";
+import { callTool, connectToServer, hasAppHtml, initializeApp, loadSandboxProxy, log, newAppBridge, type ServerInfo, type ToolCallInfo } from "./implementation";
 import { getTheme, toggleTheme, onThemeChange, type Theme } from "./theme";
 import styles from "./index.module.css";
+import * as conversation from "./conversation";
+import { PRESETS, getPreset, onPresetChange, setPreset, type PresetId } from "./presets";
+import { ProtocolLog } from "./ProtocolLog";
 
 /**
  * Check if a tool is visible to the model (not app-only).
@@ -88,6 +91,26 @@ function ThemeToggle() {
 }
 
 
+function PresetSelect() {
+  const [preset, setPresetState] = useState(getPreset);
+  useEffect(() => onPresetChange(setPresetState), []);
+  return (
+    <label className={styles.toolbarField}>
+      Host theme
+      <select value={preset.id} onChange={(e) => setPreset(e.target.value as PresetId)}>
+        {PRESETS.map((p) => (
+          <option key={p.id} value={p.id}>{p.label}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+
+/**
+ * Workshop layout: the chat stand-in on the left, the tool calls and their views in the middle,
+ * and the protocol log on the right.
+ */
 function Host({ serversPromise }: HostProps) {
   const [toolCalls, setToolCalls] = useState<ToolCallEntry[]>([]);
   const [destroyingIds, setDestroyingIds] = useState<Set<number>>(new Set());
@@ -107,25 +130,80 @@ function Host({ serversPromise }: HostProps) {
   };
 
   return (
-    <>
-      {!queryParams.hideThemeToggle && <ThemeToggle />}
-      {toolCalls.map((info) => (
-        <ToolCallInfoPanel
-          key={info.id}
-          toolCallInfo={info}
-          isDestroying={destroyingIds.has(info.id)}
-          onRequestClose={() => requestClose(info.id)}
-          onCloseComplete={() => completeClose(info.id)}
+    <div className={styles.workshop}>
+      <header className={styles.toolbar}>
+        <strong className={styles.brand}>MCP Apps workshop host</strong>
+        <PresetSelect />
+        {!queryParams.hideThemeToggle && <ThemeToggle />}
+      </header>
+      <aside className={styles.chatColumn}>
+        <CallToolPanel
+          serversPromise={serversPromise}
+          addToolCall={(info) => {
+            conversation.addCall(info.tool.name, info.input);
+            setToolCalls((calls) => [...calls, { ...info, id: nextToolCallId++ }]);
+          }}
+          initialServer={queryParams.server}
+          initialTool={queryParams.tool}
+          autoCall={queryParams.call}
         />
-      ))}
-      <CallToolPanel
-        serversPromise={serversPromise}
-        addToolCall={(info) => setToolCalls([...toolCalls, { ...info, id: nextToolCallId++ }])}
-        initialServer={queryParams.server}
-        initialTool={queryParams.tool}
-        autoCall={queryParams.call}
-      />
-    </>
+        <Conversation />
+      </aside>
+      <main className={styles.viewColumn}>
+        {toolCalls.length === 0 && <p className={styles.hint}>Pick a tool and press <b>Call Tool</b>. You are playing the model.</p>}
+        {toolCalls.map((info) => (
+          <ToolCallInfoPanel
+            key={info.id}
+            label={`${info.tool.name} #${info.id}`}
+            toolCallInfo={info}
+            isDestroying={destroyingIds.has(info.id)}
+            onRequestClose={() => requestClose(info.id)}
+            onCloseComplete={() => completeClose(info.id)}
+          />
+        ))}
+      </main>
+      <aside className={styles.logColumn}>
+        <ProtocolLog />
+      </aside>
+    </div>
+  );
+}
+
+
+/** The chat stand-in: the calls you made, messages the views sent, and the latest model context. */
+function Conversation() {
+  const turns = useSyncExternalStore(conversation.subscribe, conversation.getTurns);
+  const context = useSyncExternalStore(conversation.subscribe, conversation.getModelContext);
+  const endRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ block: "nearest" });
+  }, [turns.length]);
+
+  return (
+    <section className={styles.conversation} aria-label="Conversation">
+      <h2>Conversation</h2>
+      {context && (
+        <div className={styles.modelContext}>
+          <span className={styles.turnLabel}>Model context · from {context.from} · ui/update-model-context</span>
+          <pre>{context.text}</pre>
+        </div>
+      )}
+      {turns.length === 0 && <p className={styles.hint}>Nothing yet. Tool calls you make, and messages a view sends with ui/message, appear here.</p>}
+      {turns.map((t) =>
+        t.kind === "call" ? (
+          <div key={t.seq} className={styles.turnCall}>
+            <span className={styles.turnLabel}>Model calls a tool</span>
+            <code>{t.tool}({JSON.stringify(t.input)})</code>
+          </div>
+        ) : (
+          <div key={t.seq} className={styles.turnMessage}>
+            <span className={styles.turnLabel}>User message · from {t.from} · ui/message</span>
+            <p>{t.text}</p>
+          </div>
+        ),
+      )}
+      <div ref={endRef} />
+    </section>
   );
 }
 
@@ -317,12 +395,13 @@ function ServerSelect({ serversPromise, onSelect, initialServer, initialTool, au
 
 
 interface ToolCallInfoPanelProps {
+  label: string;
   toolCallInfo: ToolCallInfo;
   isDestroying?: boolean;
   onRequestClose?: () => void;
   onCloseComplete?: () => void;
 }
-function ToolCallInfoPanel({ toolCallInfo, isDestroying, onRequestClose, onCloseComplete }: ToolCallInfoPanelProps) {
+function ToolCallInfoPanel({ label, toolCallInfo, isDestroying, onRequestClose, onCloseComplete }: ToolCallInfoPanelProps) {
   const isApp = hasAppHtml(toolCallInfo);
 
   // For non-app tool calls, close immediately when isDestroying becomes true
@@ -361,6 +440,7 @@ function ToolCallInfoPanel({ toolCallInfo, isDestroying, onRequestClose, onClose
         <ErrorBoundary>
           <Suspense fallback="Loading...">
             <AppIFramePanel
+              label={label}
               toolCallInfo={toolCallInfo}
               isDestroying={isDestroying}
               onTeardownComplete={onCloseComplete}
@@ -417,16 +497,32 @@ function CollapsiblePanel({ icon, label, content, badge, defaultExpanded = false
 }
 
 
+// Format content blocks - handle text, images, resources, etc.
+const formatContentBlock = (c: { type: string; [key: string]: unknown }) => {
+  switch (c.type) {
+    case "text":
+      return (c as { type: "text"; text: string }).text;
+    case "image":
+      return `<image: ${(c as { mimeType?: string }).mimeType ?? "unknown"}>`;
+    case "audio":
+      return `<audio: ${(c as { mimeType?: string }).mimeType ?? "unknown"}>`;
+    case "resource":
+      return `<resource: ${(c as { resource?: { uri?: string } }).resource?.uri ?? "unknown"}>`;
+    default:
+      return `<${c.type}>`;
+  }
+};
+
+
 interface AppIFramePanelProps {
+  label: string;
   toolCallInfo: Required<ToolCallInfo>;
   isDestroying?: boolean;
   onTeardownComplete?: () => void;
 }
-function AppIFramePanel({ toolCallInfo, isDestroying, onTeardownComplete }: AppIFramePanelProps) {
+function AppIFramePanel({ label, toolCallInfo, isDestroying, onTeardownComplete }: AppIFramePanelProps) {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const appBridgeRef = useRef<ReturnType<typeof newAppBridge> | null>(null);
-  const [modelContext, setModelContext] = useState<ModelContext | null>(null);
-  const [messages, setMessages] = useState<AppMessage[]>([]);
   const [displayMode, setDisplayMode] = useState<"inline" | "fullscreen">("inline");
 
   useEffect(() => {
@@ -442,8 +538,13 @@ function AppIFramePanel({ toolCallInfo, isDestroying, onTeardownComplete }: AppI
         // `toolCallInfo`.
         if (firstTime) {
           const appBridge = newAppBridge(toolCallInfo.serverInfo, iframe, {
-            onContextUpdate: setModelContext,
-            onMessage: (msg) => setMessages((prev) => [...prev, msg]),
+            // Workshop: what the view tells "the model" goes to the conversation pane.
+            onContextUpdate: (ctx) => {
+              conversation.setModelContext(label, ctx ? [ctx.content?.map(formatContentBlock).join("\n"), ctx.structuredContent ? JSON.stringify(ctx.structuredContent, null, 2) : ""].filter(Boolean).join("\n\n") : null);
+            },
+            onMessage: (msg) => {
+              conversation.addMessage(label, msg.content.map(formatContentBlock).join("\n"));
+            },
             onDisplayModeChange: setDisplayMode,
           }, {
             // Provide container dimensions - maxHeight for flexible sizing
@@ -451,7 +552,7 @@ function AppIFramePanel({ toolCallInfo, isDestroying, onTeardownComplete }: AppI
             displayMode: "inline",
           });
           appBridgeRef.current = appBridge;
-          initializeApp(iframe, appBridge, toolCallInfo);
+          initializeApp(iframe, appBridge, toolCallInfo, label);
         }
       });
     });
@@ -480,36 +581,6 @@ function AppIFramePanel({ toolCallInfo, isDestroying, onTeardownComplete }: AppI
       });
   }, [isDestroying, onTeardownComplete]);
 
-  // Format content blocks - handle text, images, resources, etc.
-  const formatContentBlock = (c: { type: string; [key: string]: unknown }) => {
-    switch (c.type) {
-      case "text":
-        return (c as { type: "text"; text: string }).text;
-      case "image":
-        return `<image: ${(c as { mimeType?: string }).mimeType ?? "unknown"}>`;
-      case "audio":
-        return `<audio: ${(c as { mimeType?: string }).mimeType ?? "unknown"}>`;
-      case "resource":
-        return `<resource: ${(c as { resource?: { uri?: string } }).resource?.uri ?? "unknown"}>`;
-      default:
-        return `<${c.type}>`;
-    }
-  };
-
-  // Format context for display
-  const contextText = modelContext?.content?.map(formatContentBlock).join("\n") ?? "";
-  const contextJson = modelContext?.structuredContent
-    ? JSON.stringify(modelContext.structuredContent, null, 2)
-    : "";
-  const fullContext = [contextText, contextJson].filter(Boolean).join("\n\n");
-
-  // Format messages
-  const formatMessage = (m: AppMessage) => {
-    const content = m.content.map(formatContentBlock).join("\n");
-    return `[${m.role}] ${content}`;
-  };
-  const messagesText = messages.map(formatMessage).join("\n\n");
-
   const panelClassName = displayMode === "fullscreen"
     ? `${styles.appIframePanel} ${styles.fullscreen}`
     : styles.appIframePanel;
@@ -517,17 +588,6 @@ function AppIFramePanel({ toolCallInfo, isDestroying, onTeardownComplete }: AppI
   return (
     <div className={panelClassName}>
       <iframe ref={iframeRef} />
-      {messages.length > 0 && (
-        <CollapsiblePanel
-          icon="💬"
-          label="Messages"
-          content={messagesText}
-          badge={`${messages.length} message${messages.length > 1 ? "s" : ""}`}
-        />
-      )}
-      {modelContext && (
-        <CollapsiblePanel icon="📋" label="Model Context" content={fullContext} />
-      )}
     </div>
   );
 }

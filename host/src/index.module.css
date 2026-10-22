@@ -279,3 +279,336 @@
   background-color: var(--color-bg-secondary);
   color: light-dark(#dc2626, #f87171);
 }
+
+/* ---------------------------------------------------------------------------
+ * Workshop additions: three-column layout, conversation pane, protocol log.
+ * ------------------------------------------------------------------------- */
+
+.workshop {
+  display: grid;
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr) minmax(360px, 460px);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "toolbar toolbar toolbar"
+    "chat views log";
+  height: 100vh;
+}
+
+@media (max-width: 1100px) {
+  .workshop {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas: "toolbar" "chat" "views" "log";
+    height: auto;
+  }
+  .logColumn {
+    height: 70vh;
+  }
+}
+
+.toolbar {
+  grid-area: toolbar;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-secondary);
+
+  .themeToggle {
+    position: static;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+}
+
+.brand {
+  margin-right: auto;
+  font-size: 0.95rem;
+}
+
+.toolbarField {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+
+  select {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+  }
+}
+
+.chatColumn,
+.viewColumn,
+.logColumn {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.chatColumn {
+  grid-area: chat;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-right: 1px solid var(--color-border);
+
+  .callToolPanel {
+    width: 100%;
+    margin: 0;
+
+    button {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+}
+
+.viewColumn {
+  grid-area: views;
+}
+
+.logColumn {
+  grid-area: log;
+  display: flex;
+  padding: 0;
+  border-left: 1px solid var(--color-border);
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h2 {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}
+
+.turnLabel {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  color: var(--color-text-secondary);
+}
+
+.turnCall,
+.turnMessage,
+.modelContext {
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+
+  p,
+  pre {
+    margin: 0.25rem 0 0;
+  }
+
+  pre {
+    white-space: pre-wrap;
+    font-size: 0.8rem;
+  }
+}
+
+.turnCall {
+  border: 1px solid var(--color-border);
+
+  code {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+.turnMessage {
+  align-self: flex-end;
+  max-width: 90%;
+  background: var(--color-bg-secondary);
+}
+
+.modelContext {
+  border: 1px dashed var(--color-border);
+  background: var(--color-bg);
+}
+
+.protocolLog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  font-size: 0.8rem;
+
+  h2 {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}
+
+.logHead {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0.5rem;
+}
+
+.logCount {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+}
+
+.smallButton {
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.logFilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 1rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+
+  input[type="search"] {
+    flex: 1;
+    min-width: 8rem;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font: inherit;
+  }
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+
+  button {
+    padding: 0.2rem 0.5rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button + button {
+    border-left: 1px solid var(--color-border);
+  }
+
+  button[aria-pressed="true"] {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-text-secondary);
+}
+
+.logList {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: auto;
+  font-family: ui-monospace, Menlo, monospace;
+}
+
+.logRow {
+  border-bottom: 1px solid var(--color-border);
+
+  > button {
+    display: grid;
+    grid-template-columns: 3.4rem 6.4rem minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.3rem 1rem;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  > button:hover {
+    background: var(--color-bg-secondary);
+  }
+}
+
+.logTime,
+.logId {
+  color: var(--color-text-secondary);
+}
+
+.logMethod {
+  overflow-wrap: anywhere;
+
+  em {
+    font-style: normal;
+    color: var(--color-text-secondary);
+  }
+}
+
+.logChannel {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.channel_server {
+  color: light-dark(#7c3aed, #c4b5fd);
+}
+
+.channel_view {
+  color: light-dark(#0f766e, #5eead4);
+}
+
+.kind_error .logMethod,
+.kind_workshop .logMethod {
+  color: light-dark(#b91c1c, #fca5a5);
+}
+
+.kind_notification .logMethod {
+  font-style: italic;
+}
+
+.logJson {
+  margin: 0;
+  padding: 0.5rem 1rem 0.75rem;
+  background: var(--color-bg-secondary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 360px;
+  overflow: auto;
+}

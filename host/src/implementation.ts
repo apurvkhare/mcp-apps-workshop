@@ -8,11 +8,12 @@ import {
   type Tool,
 } from "@modelcontextprotocol/client";
 import { getTheme, onThemeChange } from "./theme";
-import { HOST_STYLE_VARIABLES } from "./host-styles";
+import { getPreset, onPresetChange, styleVariables } from "./presets";
+import { tapTransport } from "./protocol-log";
 
 
 const SANDBOX_PROXY_BASE_URL = "http://localhost:8081/sandbox.html";
-const IMPLEMENTATION = { name: "MCP Apps Host", version: "1.0.0" };
+const IMPLEMENTATION = { name: "MCP Apps Workshop Host", version: "1.0.0" };
 
 
 export const log = {
@@ -53,7 +54,8 @@ async function connectWithFallback(serverUrl: URL): Promise<Client> {
   // Try Streamable HTTP first (modern transport)
   try {
     const client = new Client(IMPLEMENTATION);
-    await client.connect(new StreamableHTTPClientTransport(serverUrl));
+    // Workshop: tap the transport so every host ⇄ server message shows in the protocol log.
+    await client.connect(tapTransport(new StreamableHTTPClientTransport(serverUrl), "server"));
     log.info("Connected via Streamable HTTP transport");
     return client;
   } catch (streamableError) {
@@ -207,6 +209,7 @@ export async function initializeApp(
   iframe: HTMLIFrameElement,
   appBridge: AppBridge,
   { input, resultPromise, appResourcePromise }: Required<ToolCallInfo>,
+  source?: string,
 ): Promise<void> {
   const appInitializedPromise = hookInitializedCallback(appBridge);
 
@@ -214,8 +217,9 @@ export async function initializeApp(
   //
   // IMPORTANT: Pass `iframe.contentWindow` as BOTH target and source to ensure
   // this proxy only responds to messages from its specific iframe.
+  // Workshop: tap the transport so every host ⇄ view message shows in the protocol log.
   await appBridge.connect(
-    new PostMessageTransport(iframe.contentWindow!, iframe.contentWindow!),
+    tapTransport(new PostMessageTransport(iframe.contentWindow!, iframe.contentWindow!), "view", source),
   );
 
   // Load inner iframe HTML with CSP and permissions metadata
@@ -295,9 +299,8 @@ export function newAppBridge(
     hostContext: {
       theme: getTheme(),
       platform: "web",
-      styles: {
-        variables: HOST_STYLE_VARIABLES,
-      },
+      // Workshop: the style variables come from the selected theme preset.
+      styles: { variables: styleVariables(getPreset()) },
       containerDimensions: options?.containerDimensions ?? { maxHeight: 6000 },
       displayMode: options?.displayMode ?? "inline",
       availableDisplayModes: ["inline", "fullscreen"],
@@ -305,9 +308,13 @@ export function newAppBridge(
   });
 
   // Listen for theme changes (from toggle or system) and notify the app
-  onThemeChange((newTheme) => {
+  const stopThemeListener = onThemeChange((newTheme) => {
     log.info("Theme changed:", newTheme);
     appBridge.sendHostContextChange({ theme: newTheme });
+  });
+  const stopPresetListener = onPresetChange((preset) => {
+    log.info("Theme preset changed:", preset.id);
+    appBridge.sendHostContextChange({ styles: { variables: styleVariables(preset) } });
   });
 
   // Per spec, the host SHOULD notify the view when container dimensions
@@ -316,19 +323,30 @@ export function newAppBridge(
   // a tick after onrequestdisplaymode returns — sending containerDimensions
   // alongside displayMode there would race the layout). Height stays
   // flexible (maxHeight) so the view can keep driving it via sendSizeChanged.
+  // Workshop: debounced and deduplicated, so the size animation sends one
+  // notification instead of one per frame and the protocol log stays readable.
+  let sentWidth = 0;
+  let resizeTimer: ReturnType<typeof setTimeout> | undefined;
   const iframeResizeObserver = new ResizeObserver(([entry]) => {
     const width = Math.round(entry.contentRect.width);
-    if (width > 0) {
-      appBridge.sendHostContextChange({
-        containerDimensions: { width, maxHeight: 6000 },
-      });
-    }
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (width > 0 && width !== sentWidth) {
+        sentWidth = width;
+        appBridge.sendHostContextChange({
+          containerDimensions: { width, maxHeight: 6000 },
+        });
+      }
+    }, 150);
   });
   iframeResizeObserver.observe(iframe);
   // AppBridge inherits Protocol's onclose hook — chain disposal there.
   const prevOnclose = appBridge.onclose;
   appBridge.onclose = () => {
     iframeResizeObserver.disconnect();
+    clearTimeout(resizeTimer);
+    stopThemeListener();
+    stopPresetListener();
     prevOnclose?.();
   };
 
