@@ -22,7 +22,7 @@
     "build": "vite build",
     "smoke": "tsx scripts/smoke.ts",
     "typecheck": "tsc -p tsconfig.json",
-    "deploy": "vite build && wrangler deploy",
+    "deploy": "tsx scripts/deploy.ts",
     "cut": "tsx scripts/authoring/cut.ts"
   },
   "dependencies": {

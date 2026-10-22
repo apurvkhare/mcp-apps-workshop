@@ -2,6 +2,7 @@
  * npm start: build the view, then run the MCP server and the workshop host together.
  *   npm start                  the playground
  *   npm start -- --app app     the finished reference app
+ *   npm start -- --server URL  only the workshop host, connected to a server somewhere else (a deployed Worker)
  *
  * Watches as you work: saving a view file rebuilds the view, saving a server file restarts the server,
  * and `npm run go` in another terminal reloads everything for the new step. Call the tool again in the
@@ -15,9 +16,10 @@ const args = process.argv.slice(2);
 const appArg = args.includes('--app') ? args[args.indexOf('--app') + 1] : undefined;
 const appDir = appArg ?? 'playground';
 const port = process.env.PORT ?? '3001';
+const remote = args.includes('--server') ? args[args.indexOf('--server') + 1] : undefined;
 const shell = process.platform === 'win32';
 
-if (!existsSync(resolve(appDir, 'server/http.ts'))) {
+if (!remote && !existsSync(resolve(appDir, 'server/http.ts'))) {
   console.error(`No server at ${appDir}/server/http.ts. Load a step first: npm run go 2.1`);
   process.exit(1);
 }
@@ -53,17 +55,17 @@ function stopApp() {
   app = [];
 }
 
-startApp();
+if (!remote) startApp();
 const host = spawn(bin('tsx'), ['serve.ts'], {
   stdio: 'inherit',
   cwd: 'host',
-  env: { ...process.env, SERVERS: JSON.stringify([`http://localhost:${port}/mcp`]) },
+  env: { ...process.env, SERVERS: JSON.stringify([remote ?? `http://localhost:${port}/mcp`]) },
   shell
 });
 host.on('exit', (code) => code && !stopping && stop());
 
 // `npm run go` and `npm run solution` rewrite playground/.step.json last, once the new files are in place.
-if (appDir === 'playground') {
+if (!remote && appDir === 'playground') {
   watchFile(resolve(appDir, '.step.json'), { interval: 500 }, () => {
     console.log('\nThe playground changed step. Restarting the view and the server …');
     stopApp();

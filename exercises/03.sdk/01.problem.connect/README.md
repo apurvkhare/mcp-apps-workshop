@@ -43,4 +43,4 @@ Answer these in your own words, or have your agent answer them, quoting the line
 
 ---
 
-Stuck? 💡 Read the hint lines in the code, then `npm run diff`, then `npm run solution`.
+Stuck? 💡 Read the hint lines in the code, then `npm run diff`, then `npm run solution`. (Agents: only when the person asks.)

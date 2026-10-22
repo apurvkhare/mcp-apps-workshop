@@ -2,11 +2,11 @@
 
 Hands-on workshop material for **MCP Apps with React** (React India). You build Expensify, an expense tracker in INR, as an MCP server with a React dashboard that renders inside Claude, ChatGPT, VS Code and other MCP Apps hosts.
 
-> Work in progress. The reference app, the workshop host and the exercises are in place. Slides and handouts come next.
+> Work in progress. The reference app, the workshop host, the exercises and the agent setup are in place. Slides and handouts come next.
 
 ## Setup
 
-Needs Node 22 or later.
+Needs Node 22 or later. Full instructions, to do a few days before: [SETUP.md](SETUP.md).
 
 ```bash
 npm install
@@ -14,6 +14,12 @@ npm run doctor
 ```
 
 `doctor` checks Node, the dependencies, the ports, and builds and tests the finished app. Once it passes, everything works offline.
+
+## With an AI agent
+
+[AGENTS.md](AGENTS.md) tells your agent how the workshop works: one step at a time, only in `playground/`, no peeking at solutions, and an explanation of what it wrote at the end. Claude Code and Gemini CLI read it through `CLAUDE.md` and `GEMINI.md`. Cursor, Copilot and Codex read it directly.
+
+Say "do step 3.3", or use the shortcut: `/step 3.3` in Claude Code, Copilot Chat and Gemini CLI.
 
 ## How the workshop works
 
@@ -55,10 +61,10 @@ Every command is non-interactive. Add `-- --json` for JSON output, for example `
 | `npm test` | Run the playground's tests: this step's and every earlier one's |
 | `npm run diff` | Your playground against the current step's solution |
 | `npm run solution` | Copy the current step's solution into `playground/` |
-| `npm start` | Build the view, run the server and the workshop host, and rebuild as you save. `-- --app app` runs the finished app |
+| `npm start` | Build the view, run the server and the workshop host, and rebuild as you save. `-- --app app` runs the finished app, `-- --server URL` connects the host to a deployed server |
 | `npm run inspect` | MCP Inspector, pointed at the running server |
 | `npm run doctor` | Check this machine is ready |
-| `npm run deploy` | Build the view and deploy the playground's server to Cloudflare Workers (needs a free account) |
+| `npm run deploy` | Build the view and deploy the playground's server to Cloudflare Workers (needs a free account; see [DEPLOY.md](DEPLOY.md)). `-- --app app` deploys the finished app |
 | `npm run smoke` | Call every tool, resource and prompt on the running server, like a host would |
 
 For workshop authors: `npm run cut` regenerates every exercise folder and `app/` from `scripts/authoring/source/`, and `npm run verify` checks every step: typecheck, tests, markers and builds.

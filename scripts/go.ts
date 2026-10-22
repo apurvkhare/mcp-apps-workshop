@@ -25,7 +25,7 @@ const rel = (p: string) => relative(ROOT, p);
 
 print(
   json,
-  { ok: true, step: step.id, kind, title: step.title, readme: rel(`${PLAYGROUND}/README.md`), backup: backup && rel(backup), todo },
+  { ok: true, step: step.id, kind, title: step.title, readme: rel(`${PLAYGROUND}/README.md`), backup: backup ? rel(backup) : null, todo },
   () =>
     [
       `Loaded ${step.id} ${step.title} (${kind}) into playground/.`,

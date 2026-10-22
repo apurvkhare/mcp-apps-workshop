@@ -262,7 +262,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
   // 🔨 2.1 Serve the view. Register VIEW_URI as an app resource whose text is the built HTML from viewHtml().
   //    Use registerAppResource(server, name, uri, config, readCallback). The read callback returns
   //    { contents: [ ... ] } with one entry: the uri, the mimeType, and the HTML as text.
-  // 💡 The MIME type is the RESOURCE_MIME_TYPE constant, already imported. viewHtml() may be async, so await it.
+  // 💡 Name it 'Expenses dashboard'. The uri in the contents is VIEW_URI. The MIME type is the RESOURCE_MIME_TYPE
+  //    constant, already imported. viewHtml() may be async, so await it.
   // 🧠 The view is a resource, not part of the tool result, so a host can fetch it ahead of time, cache it,
   //    and review it before anything runs. The MIME type "text/html;profile=mcp-app" is how a host knows
   //    this HTML is an MCP App to render in a sandbox, not a page to show as text.

@@ -1,6 +1,6 @@
 {
-  // Deploys the server to Cloudflare Workers' free plan: `npm run deploy`.
-  // `main` is the playground; `npm run deploy -- --app app` deploys the reference app instead.
+  // Deploys the server to Cloudflare Workers' free plan: `npm run deploy` (see DEPLOY.md).
+  // `main` is the playground; `npm run deploy -- --app app` passes the finished app's worker.ts instead.
   // Wrangler bundles the .html import in worker.ts as a text module, so the built view ships inside the Worker.
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "expensify-mcp-app",

@@ -31,7 +31,9 @@ const next =
       : 'Every step is done. Try the deployed server in a real host: see DEPLOY.md.'
     : todo.length
       ? `Fill the 🔨 markers, then: npm test`
-      : 'No 🔨 markers left, but the tests do not pass yet. Run npm test for details, or npm run diff to compare with the solution.';
+      : passing === undefined
+        ? 'No 🔨 markers left. Run npm test to check the step.'
+        : 'No 🔨 markers left, but the tests do not pass yet. Run npm test for the failures.';
 
 print(
   json,

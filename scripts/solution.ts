@@ -17,7 +17,7 @@ const backup = await backupPlayground(state ? `${state.step}.${state.kind}` : 'p
 await loadIntoPlayground(step, 'solution');
 const after = nextStep(step.id);
 
-print(json, { ok: true, step: step.id, kind: 'solution', backup: backup && relative(ROOT, backup), next: after && `npm run go ${after.id}` }, () =>
+print(json, { ok: true, step: step.id, kind: 'solution', backup: backup ? relative(ROOT, backup) : null, next: after && `npm run go ${after.id}` }, () =>
   [
     `The ${step.id} solution is now in playground/.`,
     backup ? `Your version is in ${relative(ROOT, backup)}.` : '',
