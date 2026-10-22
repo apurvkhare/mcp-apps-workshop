@@ -1008,9 +1008,9 @@
   /* The task line stands out. */
   p[data-marker="🔨"] {
     padding: 0.6rem 0.8rem;
-    border-left: 3px solid light-dark(#b45309, #fbbf24);
-    border-radius: 4px;
-    background: var(--color-bg-secondary);
+    border: 1px solid light-dark(#f2c98a, #7a5a1c);
+    border-radius: 6px;
+    background: light-dark(#fff8eb, #2a2214);
   }
 
   /* The 📡 section is about the protocol log, which is right there in the host. */
