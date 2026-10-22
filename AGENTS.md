@@ -64,7 +64,7 @@ Steps are numbered by section: 2.1 and 2.2, 3.1 to 3.4, 4.1 to 4.4, 5.1 to 5.3, 
 - **`shared/`** has the expense store and the presentational components. It isn't MCP code. Use what it exports; don't change it.
 - **TypeScript is strict.** Imports use the `.ts` and `.tsx` extensions. Match the style of the code around you: comments, naming, two-space indents, single quotes.
 - **Don't add dependencies.** Everything the workshop needs is installed, and the room may be offline.
-- **Versions are pinned:** `@modelcontextprotocol/ext-apps` 2.0.3, `@modelcontextprotocol/server` and `/client` 2.3.1, React 19.3, Zod 4. When you're unsure of an API, read the types rather than guessing from older versions: `node_modules/@modelcontextprotocol/ext-apps/dist/src/` (`app.d.ts` for the view, `server/index.d.ts` for the server helpers, `react/` for the hooks) and `node_modules/@modelcontextprotocol/server/`.
+- **Versions are pinned:** `@modelcontextprotocol/ext-apps` 2.0.3, `@modelcontextprotocol/server` and `/client` 2.3.1, React 19.3, Zod 4. The host and the tests speak MCP protocol **2026-07-28** (`server/discover`, then a `_meta` envelope on every request, no `initialize`); the server also still answers 2025-era clients. When you're unsure of an API, read the types rather than guessing from older versions: `node_modules/@modelcontextprotocol/ext-apps/dist/src/` (`app.d.ts` for the view, `server/index.d.ts` for the server helpers, `react/` for the hooks) and `node_modules/@modelcontextprotocol/server/`.
 
 ## Working on the workshop itself
 

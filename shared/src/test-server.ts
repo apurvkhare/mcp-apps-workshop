@@ -14,7 +14,11 @@ type FetchHandler = (request: Request) => Response | Promise<Response>;
 export async function connectClient(fetchHandler: FetchHandler): Promise<Client> {
   const client = new Client(
     { name: 'workshop-test', version: '1.0.0' },
-    { capabilities: { extensions: { 'io.modelcontextprotocol/ui': { mimeTypes: ['text/html;profile=mcp-app'] } } } }
+    {
+    capabilities: { extensions: { 'io.modelcontextprotocol/ui': { mimeTypes: ['text/html;profile=mcp-app'] } } },
+    // Protocol 2026-07-28 only: fails loudly if the server can't speak it.
+    versionNegotiation: { mode: { pin: '2026-07-28' } }
+  }
   );
   await client.connect(
     new StreamableHTTPClientTransport(new URL('http://test.local/mcp'), {

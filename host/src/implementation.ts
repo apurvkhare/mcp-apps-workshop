@@ -53,7 +53,9 @@ export async function connectToServer(serverUrl: URL): Promise<ServerInfo> {
 async function connectWithFallback(serverUrl: URL): Promise<Client> {
   // Try Streamable HTTP first (modern transport)
   try {
-    const client = new Client(IMPLEMENTATION);
+    // Workshop: speak protocol 2026-07-28 (server/discover, then a _meta envelope on every request).
+    // 'auto' falls back to the 2025 initialize handshake for servers that don't offer it.
+    const client = new Client(IMPLEMENTATION, { versionNegotiation: { mode: "auto" } });
     // Workshop: tap the transport so every host ⇄ server message shows in the protocol log.
     await client.connect(tapTransport(new StreamableHTTPClientTransport(serverUrl), "server"));
     log.info("Connected via Streamable HTTP transport");
