@@ -1,19 +1,15 @@
 ...@_style
 shape: sequence_diagram
 
-user: "You" {class: actor}
-view: "View\n(sandboxed iframe)" {class: ours}
-host: "Host\n(chat + model)" {class: actor}
+view: "View (iframe)" {class: ours}
+host: "Host (chat + model)" {class: actor}
 mcp: "Expensify server" {class: ours}
 
-user -> view: "picks This month   (4.1)" {class: msg}
-view -> host: "tools/call get_summary { from, to }" {class: key}
+view -> host: "tools/call get_summary   4.1" {class: key}
 host -> mcp: "tools/call get_summary, a new id" {class: msg}
 mcp -> host: "result" {class: msg}
 host -> view: "result" {class: msg}
-user -> view: "clicks Ask on food   (4.2)" {class: msg}
-view -> host: "ui/message: a user turn the model answers" {class: key}
-user -> view: "clicks Delete on a row   (4.3)" {class: msg}
-view -> host: "tools/call delete_expense { id }   app-only" {class: key}
-host -> mcp: "forwarded; the server still checks the id" {class: msg}
-view -> host: "ui/update-model-context: the deleted rows   (4.4)" {class: key}
+view -> host: "ui/message: a user turn   4.2" {class: key}
+view -> host: "tools/call delete_expense   4.3" {class: key}
+host -> mcp: "forwarded; the server checks the id" {class: msg}
+view -> host: "ui/update-model-context   4.4" {class: key}

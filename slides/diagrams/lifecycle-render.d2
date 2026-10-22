@@ -2,22 +2,17 @@
 shape: sequence_diagram
 
 user: "You" {class: actor}
-host: "Host\n(chat + model)" {class: actor}
-view: "View\n(sandboxed iframe)" {class: ours}
+host: "Host" {class: actor}
+view: "View (iframe)" {class: ours}
 mcp: "Expensify server" {class: ours}
 
-connect: "at connect" {
-  class: group
-  host -> mcp: "tools/list: get_summary has _meta.ui.resourceUri" {class: msg}
-}
-user -> host: "How much did I spend this month?" {class: msg}
-host -> mcp: "tools/call get_summary { from, to, groupBy }" {class: msg}
-host -> mcp: "resources/read ui://expensify/dashboard.html" {class: msg}
-host -> view: "mount the HTML in a sandboxed iframe" {class: key}
-view -> host: "ui/initialize   (3.1)" {class: msg}
-host -> view: "hostContext + hostCapabilities" {class: msg}
-view -> host: "ui/notifications/initialized" {class: msg}
-host -> view: "tool-input { from, to, groupBy }   (3.2)" {class: key}
-mcp -> host: "content (text) + structuredContent (data)" {class: msg}
-host -> view: "tool-result   (3.3)" {class: key}
-host -> view: "host-context-changed, any time after   (3.4)" {class: msg}
+host -> mcp: "at connect: server/discover · tools/list" {class: msg}
+user -> host: "How much did I spend?" {class: msg}
+host -> mcp: "tools/call get_summary" {class: msg}
+host -> mcp: "resources/read ui://…/dashboard.html" {class: msg}
+host -> view: "mount in a sandbox" {class: key}
+view -> host: "ui/initialize   3.1" {class: key}
+host -> view: "ui/notifications/tool-input   3.2" {class: key}
+mcp -> host: "content + structuredContent" {class: msg}
+host -> view: "ui/notifications/tool-result   3.3" {class: key}
+host -> view: "…/host-context-changed   3.4" {class: msg}

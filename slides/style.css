@@ -88,8 +88,8 @@
 .slidev-layout h1 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 2.75rem;
-  line-height: 1.04;
+  font-size: 2.4rem;
+  line-height: 1.08;
   letter-spacing: -0.018em;
   color: var(--paper-bright);
   text-wrap: balance;
@@ -283,7 +283,7 @@
   font-size: 3.4rem;
   font-weight: 600;
 }
-.slidev-layout.section h1::after { left: 0; transform: none; }
+.slidev-layout.section h1::after { left: 50%; transform: translateX(-50%); }
 
 /* Hide the "go to slide" dialog when it's in its closed state (-top-20).
    Its long autocomplete list otherwise hangs back into view on the right.
@@ -413,10 +413,6 @@
 }
 .slidev-layout .page-foot .accent { color: var(--accent-text); }
 
-/* ---- Mermaid: fit + editorial frame ------------------------------------ */
-.slidev-layout .mermaid { display: flex; justify-content: center; }
-.slidev-layout .mermaid svg { max-width: 100%; max-height: 62vh; height: auto; }
-
 /* ---- Motion ------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -442,7 +438,7 @@
 /* dense code frames: `class: dense` in a slide's frontmatter */
 .slidev-layout.dense pre code { font-size: 0.72rem; line-height: 1.5; }
 .slidev-layout.dense pre { padding: 0.8rem 1rem !important; }
-.slidev-layout.dense h1 { font-size: 2.3rem; }
+.slidev-layout.dense h1 { font-size: 2.05rem; }
 
 /* file path caption above a code frame */
 .file {
@@ -472,7 +468,7 @@
 /* source line under a slide */
 .src { font-family: var(--font-mono); font-size: 0.68rem; color: var(--paper-dim); letter-spacing: 0.02em; }
 
-/* node / arrow kit (fx- prefix: Mermaid owns .node and .flowchart) */
+/* node / arrow kit */
 .fx-flow { display: flex; align-items: center; gap: 0.5rem; }
 .fx-flow > .fx-node { flex: 1; }
 .fx-col { display: flex; flex-direction: column; gap: 0.5rem; flex: 1.35; }
@@ -499,7 +495,7 @@
 /* click-through code: keep the dimmed lines legible on a shared screen */
 .slidev-layout .slidev-code .dishonored { opacity: 0.5 !important; }
 
-/* static D2 sequence diagrams (webinar/slides/diagrams/*.d2 -> public/*.svg) */
+/* static D2 diagrams (diagrams/*.d2 -> public/*.svg, `npm run diagrams`) */
 .slidev-layout img.seq { display: block; margin: 0.4rem auto 0; max-height: 372px; max-width: 100%; }
 
 /* `{all|…}` marks every line as highlighted on the first step. Only paint the
@@ -558,9 +554,21 @@
 /* the long lifecycle sequence gets more height */
 .slidev-layout img.seq--tall { max-height: 440px; }
 
-/* big one-line statement slides */
-.say { font-family: var(--font-display); font-size: 2.2rem; line-height: 1.25; color: var(--paper-bright); max-width: 26ch; }
-.say em { color: var(--accent-text); }
+/* one big line, centred: punchlines (same as the design-system-mcp talk) */
+.big-line { font-family: var(--font-display); font-size: 2.6rem; line-height: 1.25; color: var(--paper-bright); }
+.big-line em { color: var(--accent-text); font-style: italic; }
+.big-line--sm { font-size: 2rem; }
+
+/* full-slide D2 diagram */
+.slidev-layout img.diagram { display: block; margin: 0.5rem auto 0; max-height: 400px; max-width: 100%; }
+
+/* agenda: numbered sections of the talk */
+.talk-plan .item { display: grid; grid-template-columns: 2.5rem 1fr auto; align-items: baseline; padding: 0.55rem 0; border-bottom: 1px solid var(--ink-line-soft); }
+.talk-plan .item b { font-family: var(--font-display); font-size: 1.6rem; color: var(--accent-text); font-weight: 400; }
+.talk-plan .name { font-family: var(--font-display); font-size: 1.3rem; color: var(--paper-bright); }
+.talk-plan .sub { color: var(--paper-muted); font-size: 0.9rem; margin-top: 0.1rem; }
+.talk-plan .t { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-text); }
+.talk-plan .item.is-break b, .talk-plan .item.is-break .name { color: var(--paper-dim); }
 
 /* screenshot frame */
 .shot { border: 1px solid var(--ink-line); border-radius: var(--r-lg); display: block; max-width: 100%; }
@@ -572,19 +580,16 @@
    ========================================================================= */
 
 /* section opener: number, clock, budget, and what you build */
-.sec-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 1.4rem; }
+.sec-meta { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; margin-top: 1.4rem; }
 .sec-meta span {
   font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.02em;
   padding: 0.25rem 0.6rem; border: 1px solid var(--ink-line); border-radius: var(--r-sm);
   color: var(--paper-muted); background: var(--ink-surface);
 }
 .sec-meta span.hot { color: var(--accent-text); border-color: var(--accent-border); background: var(--accent-bg); }
-.sec-build { margin-top: 1.4rem; max-width: 46rem; font-size: 1.05rem; color: var(--paper); }
+.sec-build { margin: 1.2rem auto 0; max-width: 44rem; font-size: 1.15rem; line-height: 1.5; color: var(--paper-muted); }
 .sec-build b { color: var(--accent-text); }
-.slidev-layout.section .sec-num {
-  font-family: var(--font-display); font-weight: 700; font-size: 6rem; line-height: 1;
-  color: var(--accent); opacity: 0.9; margin-bottom: 0.4rem;
-}
+.slidev-layout.section .kicker { margin-bottom: 0.6rem; }
 
 /* the step: a terminal-ish command line, then the markers */
 .cmd {
@@ -595,11 +600,11 @@
 .cmd::before { content: '$ '; color: var(--accent-text); }
 .steps { display: grid; gap: 0.5rem; }
 .steps > div {
-  display: grid; grid-template-columns: 3.2rem 1fr auto; gap: 0.8rem; align-items: baseline;
+  display: grid; grid-template-columns: 4.2rem 1fr auto; gap: 0.8rem; align-items: baseline;
   padding: 0.5rem 0.8rem; background: var(--ink-surface-2); border: 1px solid var(--ink-line);
   border-radius: var(--r-md); font-size: 0.88rem;
 }
-.steps .n { font-family: var(--font-mono); color: var(--accent-text); font-weight: 500; }
+.steps .n { font-family: var(--font-mono); color: var(--accent-text); font-weight: 500; white-space: nowrap; }
 .steps .w { font-family: var(--font-mono); font-size: 0.72rem; color: var(--paper-dim); }
 
 /* marker legend */

@@ -3,7 +3,8 @@ theme: seriph
 title: MCP Apps with React
 info: |
   React India, hands-on workshop, 150 minutes. Build interactive UI that runs inside Claude and ChatGPT.
-  ext-apps 2.0.3, @modelcontextprotocol/server 2.3.1, React 19. The app is Expensify, an INR expense tracker.
+  MCP protocol 2026-07-28, MCP Apps 2026-01-26 (ext-apps 2.0.3), TypeScript SDK 2.3.1, React 19.
+  The app is Expensify, an INR expense tracker.
 class: text-center
 highlighter: shiki
 lineNumbers: false
@@ -26,12 +27,18 @@ fonts:
 
 <div class="cover-rule"></div>
 
-<div class="cover-tagline mt-6">hands-on · ext-apps 2.0.3 · React 19 · Expensify, in ₹</div>
+<div class="cover-tagline mt-6">MCP 2026-07-28 · ext-apps 2.0.3 · React 19 · Expensify, in ₹</div>
+
+<style>
+.slidev-layout.cover h1 { font-size: 4.8rem; }
+.slidev-layout.cover .cover-sub { font-size: 2.2rem; }
+</style>
 
 <div class="nameplate nameplate--foot"><span class="kicker">React India · Workshop · 150 min</span></div>
 
 <!--
 0:00. Doors. Put this up while people sit down.
+Versions on the tagline: MCP protocol revision 2026-07-28 (the July revision, stateless, no handshake), the MCP Apps extension through ext-apps 2.0.3, React 19.
 Ask the room to run `npm run doctor` now if they have not. Everything after install works offline.
 Say: "Laptops open, terminal open, repo cloned. We start building in about 25 minutes."
 -->
@@ -54,25 +61,21 @@ layout: center
 
 ---
 
-# 150 minutes, one app
+# The agenda: seven sections in 150 minutes
 
-<div class="text-gray-400 mb-4">MCP first, then six rounds of: understand, fill, run, read the traffic.</div>
-
-<div class="agenda">
-  <div>
-    <div class="agenda-row"><span class="t">0:00</span><span>Opening</span></div>
-    <div class="agenda-row"><span class="t">0:03</span><span><b>1</b> · MCP in practice <span class="text-gray-500">(no code)</span></span></div>
-    <div class="agenda-row"><span class="t">0:23</span><span><b>2</b> · Setting up for UI</span></div>
-    <div class="agenda-row"><span class="t">0:38</span><span><b>3</b> · Understand the SDK, then fill the gaps</span></div>
-    <div class="agenda-row is-break"><span class="t">1:11</span><span>Break · TAs help anyone stuck</span></div>
-  </div>
-  <div>
-    <div class="agenda-row"><span class="t">1:21</span><span><b>4</b> · Make it interactive</span></div>
-    <div class="agenda-row"><span class="t">1:48</span><span><b>5</b> · Make it look native</span></div>
-    <div class="agenda-row"><span class="t">2:08</span><span><b>6</b> · Deploy it</span></div>
-    <div class="agenda-row"><span class="t">2:16</span><span><b>7</b> · One app, every host <span class="text-gray-500">(demo, optional)</span></span></div>
-    <div class="agenda-row"><span class="t">2:24</span><span>Wrap, then Q&A</span></div>
-  </div>
+<div class="grid grid-cols-2 gap-x-10 mt-4">
+<div class="talk-plan">
+  <div class="item"><b>1</b><div><div class="name">Read the MCP traffic</div><div class="sub">No code. Read every message</div></div><span class="t">0:03</span></div>
+  <div class="item"><b>2</b><div><div class="name">Serve the view, link the tool</div><div class="sub">Steps 2.1 and 2.2</div></div><span class="t">0:23</span></div>
+  <div class="item"><b>3</b><div><div class="name">Connect the view with useApp</div><div class="sub">Steps 3.1 to 3.4</div></div><span class="t">0:38</span></div>
+  <div class="item is-break"><b>·</b><div><div class="name">Break</div><div class="sub">TAs help anyone stuck</div></div><span class="t">1:11</span></div>
+</div>
+<div class="talk-plan">
+  <div class="item"><b>4</b><div><div class="name">Make the view interactive</div><div class="sub">Steps 4.1 to 4.4</div></div><span class="t">1:21</span></div>
+  <div class="item"><b>5</b><div><div class="name">Theme it with the host's styles</div><div class="sub">Steps 5.1 to 5.3</div></div><span class="t">1:48</span></div>
+  <div class="item"><b>6</b><div><div class="name">Deploy to Cloudflare Workers</div><div class="sub">Step 6.1</div></div><span class="t">2:08</span></div>
+  <div class="item"><b>7</b><div><div class="name">Run it in every host</div><div class="sub">Demo, optional. Then wrap and Q&A at 2:24</div></div><span class="t">2:16</span></div>
+</div>
 </div>
 
 <!--
@@ -82,7 +85,7 @@ Section 3 is the longest, and the break sits right after it on purpose: anyone b
 
 ---
 
-# Where we are going
+# The dashboard you'll build
 
 <div class="grid grid-cols-5 gap-6 mt-2 items-center">
 
@@ -117,7 +120,7 @@ The seed data is relative to today, so the numbers on the day will differ. That 
 
 ---
 
-# How every section works
+# Every section runs the same five steps
 
 <div class="grid grid-cols-5 gap-3 mt-6 text-sm">
   <div class="ed-card"><div class="kicker">1 · 8–12 min</div><b class="text-lg">Understand</b><br/><span class="text-gray-400">Each export: what it does, when it fires, what breaks without it.</span></div>
@@ -142,7 +145,7 @@ Key line: "Nobody gets left behind. npm run solution puts the answer in the play
 
 ---
 
-# The markers
+# The eight code markers and what each means
 
 <div class="text-sm text-gray-400 mb-3">Every gap in the code is marked with one emoji, with one fixed meaning. People scan them. Agents follow them.</div>
 
@@ -165,7 +168,7 @@ Key line: "Nobody gets left behind. npm run solution puts the answer in the play
 
 ---
 
-# Working with an agent
+# Doing a step with your coding agent
 
 <div class="grid grid-cols-2 gap-6 mt-2 text-sm">
 
@@ -198,7 +201,7 @@ Tell them: if your agent wanders into exercises/ or app/, stop it and point it a
 
 ---
 
-# The workshop host, on localhost:8080
+# The workshop host on localhost:8080: chat, view, protocol log
 
 <div class="grid grid-cols-3 gap-3 mt-4 text-sm">
   <div class="ed-card"><div class="kicker">Conversation</div>Pick a tool, fill in its arguments, press <b>Call</b>. You play the model. Messages from the view land here as user turns, and the latest model context is pinned on top.</div>
@@ -220,13 +223,11 @@ If anyone's ports are busy: `npm run doctor` names the process.
 layout: section
 ---
 
-<div class="sec-num">1</div>
+<div class="kicker">Section 1 · 0:03 · 20 min · no code</div>
 
-# MCP in practice
+# Read the MCP traffic of the finished server
 
-<div class="sec-meta"><span class="hot">0:03</span><span>20 min</span><span>follow along · no code</span></div>
-
-<div class="sec-build">You'll <b>walk the finished Expensify server</b> in MCP Inspector, and read every message as it goes by: <code>initialize</code>, <code>tools/list</code>, <code>tools/call</code>, <code>resources/read</code>, <code>prompts/get</code>.</div>
+<div class="sec-build">Walk the finished Expensify server in MCP Inspector and read every message of protocol 2026-07-28: <code>server/discover</code>, <code>tools/list</code>, <code>tools/call</code>, <code>resources/read</code>, <code>prompts/get</code>.</div>
 
 <!--
 0:03. Twenty minutes of MCP before any UI. About 8 minutes of concepts, then real messages from the real server, then Inspector live.
@@ -235,23 +236,20 @@ Ask: "Who has used an MCP server? Who has written one?" Calibrate speed from the
 
 ---
 
-# Every AI app, every tool
+# MCP turns N × M integrations into N + M
 
-<div class="grid grid-cols-2 gap-8 mt-6">
-
-<div class="p-5 bg-red-900 bg-opacity-20 rounded-lg border border-red-500 text-sm">
-  <div class="text-lg font-bold text-red-400">Before: N × M</div>
-  <div class="mt-2">Claude, ChatGPT, Copilot and Cursor each need their own plugin for your expense tracker, your calendar, your database. Four hosts, three tools: twelve integrations, all slightly different.</div>
+<div class="grid grid-cols-2 gap-6 mt-6 text-sm">
+  <div class="ed-card ed-card--bad">
+    <div class="kicker">Before · N × M</div>
+    <div class="mt-2">Claude, ChatGPT, Copilot and Cursor each need their own plugin for your expense tracker, your calendar, your database. Four hosts, three tools: twelve integrations, all slightly different.</div>
+  </div>
+  <div class="ed-card ed-card--good">
+    <div class="kicker">After · N + M</div>
+    <div class="mt-2">Each host speaks MCP once. Each tool speaks MCP once. Your Expensify server works in every host that speaks it, and today, with a UI.</div>
+  </div>
 </div>
 
-<div class="p-5 bg-green-900 bg-opacity-20 rounded-lg border border-green-500 text-sm">
-  <div class="text-lg font-bold text-green-400">After: N + M</div>
-  <div class="mt-2">Each host speaks MCP once. Each tool speaks MCP once. Your Expensify server works in every host that speaks it, and today, with a UI.</div>
-</div>
-
-</div>
-
-<div v-click class="mt-8 say" style="font-size:1.6rem">MCP is <em>one protocol</em> between any AI app and any tool.</div>
+<div v-click class="big-line big-line--sm mt-10 text-center">MCP is <em>one protocol</em> between any AI app and any tool.</div>
 
 <!--
 0:04. One minute. This is the USB-C pitch, and everyone has heard it. Move on fast.
@@ -259,25 +257,14 @@ Ask: "Who has used an MCP server? Who has written one?" Calibrate speed from the
 
 ---
 
-# Host, client, server
+# Host, client and server: who runs what
 
-```mermaid {scale: 0.85}
-graph LR
-    subgraph H["Host · Claude, ChatGPT, VS Code, the workshop host"]
-        M["Model"]
-        C1["Client"]
-        C2["Client"]
-    end
-    C1 -->|"MCP · JSON-RPC"| S1["Expensify server<br/>localhost:3001/mcp"]
-    C2 -->|"MCP"| S2["Another server"]
-    M -.->|"decides to call"| C1
-    style S1 fill:#c2502e,color:#fff
-```
+<img src="/mcp-roles.svg" class="diagram" style="max-height: 230px" alt="The host (Claude, ChatGPT, VS Code, the workshop host) holds the model and one MCP client per server. One client sends tools/call to the Expensify server on localhost:3001/mcp; another speaks JSON-RPC to another server." />
 
-<div class="grid grid-cols-3 gap-3 mt-2 text-sm">
-  <div class="ed-card"><b>Host</b>: the AI app the user sees. It owns the model and the UI.</div>
-  <div class="ed-card"><b>Client</b>: one per server, inside the host. Speaks MCP.</div>
-  <div class="ed-card ed-card--accent"><b>Server</b>: your code. Exposes tools, resources and prompts.</div>
+<div class="grid grid-cols-3 gap-4 mt-5 text-sm">
+  <div class="ed-card"><div class="kicker">Host</div><div class="mt-1">The AI app the user sees. It owns the model and the UI.</div></div>
+  <div class="ed-card"><div class="kicker">Client</div><div class="mt-1">One per server, inside the host. Speaks MCP.</div></div>
+  <div class="ed-card ed-card--accent"><div class="kicker">Server</div><div class="mt-1">Your code. Exposes tools, resources and prompts. <b>This is what we build.</b></div></div>
 </div>
 
 <!--
@@ -286,7 +273,7 @@ graph LR
 
 ---
 
-# Three primitives, three owners
+# Tools, resources and prompts, and who uses each
 
 | Primitive | Who decides to use it | In Expensify |
 |---|---|---|
@@ -303,33 +290,39 @@ Prompts are user-controlled templates, like slash commands. Resources are contex
 
 ---
 
-# Transports, in one slide
+# Transports: Streamable HTTP, stdio and postMessage
 
 <div class="grid grid-cols-2 gap-6 mt-4 text-sm">
-
-<div class="ed-card">
-<div class="text-lg font-bold text-blue-400">stdio</div>
-<div class="mt-2">The host starts your server as a child process and talks over stdin and stdout. Local only. Great for a CLI tool on your laptop.</div>
+  <div class="ed-card ed-card--accent">
+    <div class="kicker">Streamable HTTP · what we use</div>
+    <div class="mt-2">One endpoint, <code>POST /mcp</code>. Every message is its own HTTP request, and carries its own version and capabilities.</div>
+    <div class="mt-2">The reply is one JSON object, or a short SSE stream on that same response when there's progress to report.</div>
+    <div class="mt-2"><b>No session, no handshake.</b> Any instance can answer any request: Node on your laptop, Cloudflare Workers in section 6.</div>
+  </div>
+  <div class="grid gap-4 content-start">
+    <div class="ed-card">
+      <div class="kicker">stdio · local</div>
+      <div class="mt-2">The host starts your server as a child process and talks over stdin and stdout. Good for a CLI tool on your laptop.</div>
+    </div>
+    <div class="ed-card">
+      <div class="kicker">postMessage · the view, section 3</div>
+      <div class="mt-2">Between your view's iframe and the host. Same JSON-RPC, a different pipe.</div>
+    </div>
+  </div>
 </div>
 
-<div class="ed-card ed-card--accent">
-<div class="text-lg font-bold">Streamable HTTP</div>
-<div class="mt-2">One endpoint, <code>POST /mcp</code>. The reply is JSON or a short SSE stream. Works locally and on the internet. <b>We use this one.</b></div>
-</div>
-
-</div>
-
-<div class="mt-6 text-sm">This server is <b>stateless</b>: no session id, a fresh <code>McpServer</code> per request. So the same code runs in Node on your laptop and on Cloudflare Workers in section 6.</div>
-
-<div class="mt-3 text-sm text-gray-400">The view in your app uses a third transport, <code>postMessage</code>, between the iframe and the host. Same JSON-RPC, different pipe. Section 3.</div>
+<div class="text-xs text-gray-400 mt-6">Older clients and servers use the 2025 revision: an <code>initialize</code> handshake and an <code>Mcp-Session-Id</code>. The SDK still serves them, and real hosts may still negotiate it, so the workshop host connects with <code>versionNegotiation: { mode: 'auto' }</code>.</div>
 
 <!--
-0:07. Keep it short. The only takeaway: same JSON-RPC messages, different pipes. stdio, HTTP, and later postMessage.
+0:07. Keep it short. The takeaway: same JSON-RPC messages, different pipes. HTTP, stdio, and later postMessage.
+Our server is stateless: createMcpHandler builds a fresh McpServer per request. That's only possible because protocol 2026-07-28 puts the version and capabilities on every request instead of in a session.
+The footnote, only if asked: the SDK (2.3.1) speaks both eras. The client opts in to 2026-07-28 with versionNegotiation. The workshop host uses mode 'auto': it probes with server/discover and falls back to the 2025 handshake for an older server. The tests, the smoke check and the wire capture pin '2026-07-28' so they fail loudly if the server can't speak it.
+Removed in 2026-07-28, if someone asks: sessions, the GET stream for server-to-client messages, resumable streams. A server that needs input from the user returns resultType input_required; the client answers and retries.
 -->
 
 ---
 
-# JSON-RPC in 30 seconds
+# JSON-RPC: request, response, notification
 
 <div class="grid grid-cols-3 gap-4 mt-4">
 
@@ -339,7 +332,7 @@ Prompts are user-controlled templates, like slash commands. Resources are contex
 ```json
 {
   "jsonrpc": "2.0",
-  "id": 2,
+  "id": 1,
   "method": "tools/call",
   "params": { "name": "get_summary" }
 }
@@ -352,7 +345,7 @@ Prompts are user-controlled templates, like slash commands. Resources are contex
 ```json
 {
   "jsonrpc": "2.0",
-  "id": 2,
+  "id": 1,
   "result": { "content": [] }
 }
 ```
@@ -365,87 +358,94 @@ Prompts are user-controlled templates, like slash commands. Resources are contex
 {
   "jsonrpc": "2.0",
   "method":
-    "notifications/initialized"
+    "ui/notifications/tool-result",
+  "params": { "content": [] }
 }
 ```
 </div>
 
 </div>
 
-<div class="mt-4 text-sm text-gray-400">A response carries a <code>result</code> or an <code>error</code>, never both. The <b>id</b> is the only thing that pairs it with its request. You'll match ids by eye in the log all day.</div>
+<div class="mt-4 text-sm text-gray-400">A response carries a <code>result</code> or an <code>error</code>, never both. The <b>id</b> is the only thing that pairs it with its request. You'll match ids by eye in the protocol log all day.</div>
 
 <!--
 0:08. Three shapes. That is all of JSON-RPC that matters today. Ask the room: "What pairs a response with its request?" Answer: the id.
+The notification is one the view gets in section 3. Between host and view you'll see lots of them. Between host and server, in 2026-07-28, almost everything is a request and its response.
 -->
 
 ---
 
-# The lifecycle
+# The 2026-07-28 lifecycle: discover, then requests
 
-```mermaid {scale: 0.62}
-sequenceDiagram
-    participant C as Client (in the host)
-    participant S as Expensify server
-    C->>S: initialize { protocolVersion, capabilities, clientInfo }
-    S-->>C: result { protocolVersion, capabilities, serverInfo, instructions }
-    C-)S: notifications/initialized
-    Note over C,S: negotiated. Now any request, in any order.
-    C->>S: tools/list
-    S-->>C: tools, with inputSchema, outputSchema, _meta
-    C->>S: tools/call get_summary
-    S-->>C: content + structuredContent
-    C->>S: resources/read · prompts/get
-    S-->>C: contents · messages
-```
+<div class="grid grid-cols-5 gap-6 items-center">
+
+<div class="col-span-3">
+<img src="/mcp-lifecycle.svg" class="diagram" style="max-height: 370px" alt="Sequence: the client sends server/discover and gets back supportedVersions, capabilities and serverInfo. Then any request, in any order, each with its own _meta: tools/list returns tools with _meta.ui.resourceUri, tools/call get_summary returns content and structuredContent, resources/read and prompts/get return contents and messages. No handshake, no session id." />
+</div>
+
+<div class="col-span-2 text-sm space-y-3">
+  <div class="ed-card"><div class="kicker">1 · Discover</div><div class="mt-1"><code>server/discover</code> asks what the server supports. One request, one answer.</div></div>
+  <div class="ed-card"><div class="kicker">2 · Any request</div><div class="mt-1">Each request carries the protocol version and the client's capabilities in its own <code>_meta</code>.</div></div>
+  <div class="ed-card ed-card--accent"><div class="kicker">MCP Apps switches on here</div><div class="mt-1">The client lists the <code>io.modelcontextprotocol/ui</code> extension in those capabilities. On every request.</div></div>
+</div>
+
+</div>
 
 <!--
-0:09. Initialize is a negotiation: each side says what it supports, and neither uses anything the other did not declare. That is exactly how MCP Apps gets switched on: the client declares an extension. Next slide shows it.
+0:09. The whole lifecycle of protocol 2026-07-28 in two steps. Discover is optional for a client that already knows the server, but every SDK client does it at connect.
+There's no negotiation phase to remember and nothing to clean up: the server holds no state about the client between requests. That's why the same code runs on Workers.
+MCP Apps rides on capabilities: a host that can render views says so with the io.modelcontextprotocol/ui extension. Next slide shows it, in the real bytes.
 -->
 
 ---
 class: dense
 ---
 
-# On the wire: initialize
+# On the wire: server/discover
 
 <div class="grid grid-cols-2 gap-5">
 
 <div>
 <div class="dir"><b>client → server</b> · POST /mcp</div>
 
-```json {4-11|12|all}
-{
-  "jsonrpc": "2.0", "id": 0, "method": "initialize",
-  "params": {
-    "protocolVersion": "2025-11-25",
-    "capabilities": {
+```text
+mcp-protocol-version: 2026-07-28
+mcp-method: server/discover
+```
+
+```json {4-8|8-11|all}
+{ "jsonrpc": "2.0", "id": "server-discover-probe-1",
+  "method": "server/discover",
+  "params": { "_meta": {
+    "io.modelcontextprotocol/protocolVersion":
+      "2026-07-28",
+    "io.modelcontextprotocol/clientInfo":
+      { "name": "workshop-test", "version": "1.0.0" },
+    "io.modelcontextprotocol/clientCapabilities": {
       "extensions": {
         "io.modelcontextprotocol/ui": {
-          "mimeTypes": ["text/html;profile=mcp-app"]
-        }
-      }
-    },
-    "clientInfo": { "name": "workshop-test", … }
-  }
+          "mimeTypes": ["text/html;profile=mcp-app"] } } }
+  } }
 }
 ```
 </div>
 
 <div>
-<div class="dir res"><b>server → client</b> · 200 text/event-stream</div>
+<div class="dir res"><b>server → client</b> · 200 application/json</div>
 
 ```json
-{
-  "jsonrpc": "2.0", "id": 0,
+{ "jsonrpc": "2.0", "id": "server-discover-probe-1",
   "result": {
-    "protocolVersion": "2025-11-25",
+    "supportedVersions": ["2026-07-28"],
     "capabilities": {
       "tools": { "listChanged": true },
       "resources": { "listChanged": true },
-      "prompts": { "listChanged": true }
-    },
-    "serverInfo": { "name": "expensify", "title": "Expensify", … },
-    "instructions": "Personal expense tracker in INR. …"
+      "prompts": { "listChanged": true } },
+    "instructions": "Personal expense tracker in INR. …",
+    "resultType": "complete",
+    "ttlMs": 0, "cacheScope": "private",
+    "_meta": { "io.modelcontextprotocol/serverInfo":
+      { "name": "expensify", "title": "Expensify", … } }
   }
 }
 ```
@@ -453,54 +453,66 @@ class: dense
 
 </div>
 
-<div class="src mt-2">Captured from app/server/server.ts with @modelcontextprotocol/client 2.3.1 · slides/scripts/capture-wire.ts · trimmed</div>
+<div class="src mt-2">Captured from app/server/server.ts with @modelcontextprotocol/client 2.3.1, pinned to 2026-07-28 · slides/scripts/capture-wire.ts · reflowed</div>
 
 <!--
 0:10. Real traffic, not a drawing. Captured by slides/scripts/capture-wire.ts against the finished server, in process.
-Click 1: the extension. This one block is how a host says "I can render MCP Apps". A host without it just never sees a view. The server can check it with getUiCapability; ours doesn't need to.
-Click 2: clientInfo. Inspector or Claude would put their own name here.
-The server answers with what it has: tools, resources, prompts. And instructions: a hint for the model about how to use this server.
+Click 1: the envelope. protocolVersion, clientInfo, clientCapabilities. In 2026-07-28 every request carries these three keys. This is the only slide that shows it in full.
+Click 2: the extension. This one block is how a host says "I can render MCP Apps". A host without it just never sees a view. The server can check it with getUiCapability; ours doesn't need to.
+The answer: the versions it speaks, what it has (tools, resources, prompts), instructions (a hint for the model about how to use this server), and serverInfo in _meta.
+resultType "complete" means "here is your answer". ttlMs and cacheScope are cache hints: 0 and private mean "don't cache".
 -->
 
 ---
 class: dense
 ---
 
-# On the wire: then what?
+# Every request carries its own envelope
 
 <div class="grid grid-cols-2 gap-5">
 
 <div>
-<div class="dir"><b>client → server</b> · a notification</div>
-
-```json
-{ "jsonrpc": "2.0", "method": "notifications/initialized" }
-```
-
-<div class="dir res mt-2"><b>server → client</b></div>
+<div class="dir"><b>client → server</b> · tools/call, the HTTP headers</div>
 
 ```text
-202 Accepted   (no body: notifications get no reply)
+POST /mcp
+content-type: application/json
+accept: application/json, text/event-stream
+mcp-protocol-version: 2026-07-28
+mcp-method: tools/call
+mcp-name: get_summary
 ```
 
-<div class="dir mt-3"><b>client → server</b> · GET /mcp, to open a stream</div>
+<div class="dir mt-2"><b>client → server</b> · the body</div>
 
 ```json
-{ "jsonrpc": "2.0", "id": null,
-  "error": { "code": -32000, "message": "Method not allowed." } }
+{ "jsonrpc": "2.0", "id": 1, "method": "tools/call",
+  "params": {
+    "name": "get_summary",
+    "arguments": { "from": "2026-10-01", … },
+    "_meta": { "io.modelcontextprotocol/protocolVersion": …,
+               "io.modelcontextprotocol/clientInfo": …,
+               "io.modelcontextprotocol/clientCapabilities": … }
+  } }
 ```
 </div>
 
-<div class="text-sm space-y-3">
-  <div class="ed-card">Every later request carries the header <code>mcp-protocol-version: 2025-11-25</code>.</div>
-  <div class="ed-card">No <code>mcp-session-id</code> header anywhere. The server is <b>stateless</b>: any request can land on any process.</div>
-  <div class="ed-card ed-card--accent">The <code>405</code> on GET is fine: the client asked for a server-to-client stream, and a stateless server has nothing to push. It just carries on with POSTs.</div>
+<div class="text-sm space-y-2">
+  <div class="ed-card" style="padding: 0.55rem 0.9rem"><div class="kicker">Headers</div><div class="mt-1"><code>mcp-method</code> and <code>mcp-name</code> copy the body, so a load balancer or gateway can route without parsing JSON.</div></div>
+  <div class="ed-card" style="padding: 0.55rem 0.9rem"><div class="kicker">_meta envelope</div><div class="mt-1">The same three keys on every request. The server needs nothing from an earlier one.</div></div>
+  <div class="ed-card" style="padding: 0.55rem 0.9rem"><div class="kicker">Result</div><div class="mt-1"><code>resultType: "complete"</code>, plus <code>serverInfo</code> in its <code>_meta</code>. <code>"input_required"</code> would mean "ask the user, then retry".</div></div>
+  <div class="ed-card ed-card--accent" style="padding: 0.55rem 0.9rem"><div class="kicker">Not on the wire</div><div class="mt-1">No <code>mcp-session-id</code>, no GET stream. That's what <b>stateless</b> means.</div></div>
 </div>
 
 </div>
+
+<div class="src mt-2">From here on, the slides trim the envelope, the headers and serverInfo. They're the same on every message.</div>
 
 <!--
-0:11. Two details people trip over in real logs. The 202 with no body: notifications never get a reply. And the 405 on GET: not a bug, a stateless server saying "I don't push". Inspector shows the same.
+0:11. The one slide about the envelope. After this, every wire slide hides it, and says so.
+Headers: mcp-protocol-version on every request, mcp-method always, mcp-name for tools/call, resources/read and prompts/get. Routing without reading the body.
+input_required: the 2026-07-28 way for a server to ask the user something mid-call (elicitation). The server returns a result that says what it needs; the client gets the answer and sends the request again with it. Our server never needs it. Mention only if asked.
+Inspector and the workshop host show the same headers in their logs.
 -->
 
 ---
@@ -512,7 +524,7 @@ class: dense
 <div class="grid grid-cols-5 gap-5">
 
 <div class="col-span-3">
-<div class="dir res"><b>server → client</b> · one of four tools, trimmed</div>
+<div class="dir res"><b>server → client</b> · one of four tools · envelope and serverInfo trimmed</div>
 
 ```json {2-4|5-9|10|11|12-17}
 {
@@ -558,12 +570,12 @@ class: dense
 <div class="grid grid-cols-2 gap-5">
 
 <div>
-<div class="dir"><b>client → server</b></div>
+<div class="dir"><b>client → server</b> · envelope trimmed</div>
 
 ```json
 {
   "jsonrpc": "2.0",
-  "id": 2,
+  "id": 1,
   "method": "tools/call",
   "params": {
     "name": "get_summary",
@@ -579,9 +591,9 @@ class: dense
 </div>
 
 <div>
-<div class="dir res"><b>server → client</b> · id 2, trimmed</div>
+<div class="dir res"><b>server → client</b> · id 1 · serverInfo trimmed</div>
 
-```json {3-6|7-15}
+```json {3-6|7-15|16}
 {
   "result": {
     "content": [{
@@ -597,7 +609,8 @@ class: dense
         { "key": "travel", "total": 6420, "count": 1 },
         { "key": "shopping", "total": 3798, … }, …
       ]
-    }
+    },
+    "resultType": "complete"
   }
 }
 ```
@@ -614,12 +627,12 @@ content: the model reads and quotes it. And every host without MCP Apps shows it
 class: dense
 ---
 
-# On the wire: resources and prompts
+# On the wire: resources/read and prompts/get
 
 <div class="grid grid-cols-2 gap-5">
 
 <div>
-<div class="dir"><b>resources/read</b> · <code>expenses://categories</code></div>
+<div class="dir res"><b>resources/read</b> · <code>expenses://categories</code> · the result, trimmed</div>
 
 ```json
 { "contents": [{
@@ -629,21 +642,23 @@ class: dense
 } ] }
 ```
 
-<div class="dir mt-3"><b>resources/read</b> · <code>ui://expensify/dashboard.html</code></div>
+<div class="dir res mt-3"><b>resources/read</b> · <code>ui://expensify/dashboard.html</code></div>
 
 ```json
 { "contents": [{
     "uri": "ui://expensify/dashboard.html",
     "mimeType": "text/html;profile=mcp-app",
     "text": "<!doctype html><html>…the built view…</html>",
-    "_meta": { "ui": { "csp": { "resourceDomains": [
-      "https://fonts.googleapis.com", "https://fonts.gstatic.com" ] } } }
+    "_meta": { "ui": {
+      "csp": { "resourceDomains": [
+        "https://fonts.googleapis.com", "https://fonts.gstatic.com" ] },
+      "prefersBorder": false } }
 } ] }
 ```
 </div>
 
 <div>
-<div class="dir"><b>prompts/get</b> · <code>monthly_review { month: "2026-10" }</code></div>
+<div class="dir res"><b>prompts/get</b> · <code>monthly_review { month: "2026-10" }</code> · the result</div>
 
 ```json
 { "messages": [{
@@ -653,7 +668,7 @@ class: dense
 } ] }
 ```
 
-<div class="mt-3 text-sm ed-card">Spot it: the view <b>is</b> a resource. Same <code>resources/read</code>, a different MIME type. That's section 2.</div>
+<div class="mt-3 text-sm ed-card ed-card--accent">Spot it: the view <b>is</b> a resource. Same <code>resources/read</code>, a different MIME type. That's section 2.</div>
 </div>
 
 </div>
@@ -664,14 +679,14 @@ class: dense
 
 ---
 
-# Follow along: Inspector
+# Follow along: the finished server in MCP Inspector
 
 <div class="cue mt-2">
   <div><code>npm start -- --app app</code> · the finished server on <code>:3001</code></div>
   <div><code>npm run inspect</code> · Inspector on <code>:6274</code>, already pointed at <code>localhost:3001/mcp</code>. Press <b>Connect</b>.</div>
   <div><b>Tools</b>: list them, call <code>get_summary</code> with <code>{ "groupBy": "category" }</code>. Find <code>content</code> and <code>structuredContent</code>.</div>
   <div><b>Resources</b>: read <code>expenses://categories</code>. <b>Prompts</b>: get <code>monthly_review</code>, with and without a month.</div>
-  <div><b>History</b>: open each request and its response. Find the <code>id</code> that pairs them.</div>
+  <div><b>History</b>: find <code>server/discover</code> first. Open each request and its response, and find the <code>id</code> that pairs them.</div>
 </div>
 
 <div class="mt-3 text-sm text-gray-400">Explain it back: who decides when a tool, a resource and a prompt are used? What pairs a response with its request?</div>
@@ -680,6 +695,7 @@ class: dense
 0:15 to 0:23. LIVE DEMO, then the room does it. About 8 minutes.
 If Inspector won't open: it prints a URL with a token, copy the full URL.
 Walk the room. Most common problem: the server isn't running, so Connect fails.
+Inspector 2.10 can speak either protocol revision. Against our server it should open with server/discover; if someone's History shows the older 2025 handshake instead, their Inspector negotiated down. Not a problem for the exercise. Check this in the dry run.
 At 0:22 ask the three "Explain it back" questions out loud, take one answer each. Then move on whether or not everyone finished: nothing later depends on Inspector.
 -->
 
@@ -687,13 +703,13 @@ At 0:22 ask the three "Explain it back" questions out loud, take one answer each
 layout: section
 ---
 
-<div class="sec-num">2</div>
+<div class="kicker">Section 2 · 0:23 · 15 min · steps 2.1 and 2.2</div>
 
-# Setting up for UI
+# Serve the view and link the tool to it
 
-<div class="sec-meta"><span class="hot">0:23</span><span>15 min</span><span>steps 2.1 · 2.2</span><span>server/server.ts</span></div>
+<div class="sec-build">Add a <code>ui://</code> resource with the view's HTML, and point <code>get_summary</code> at it. By the end, calling the tool mounts your view in the workshop host.</div>
 
-<div class="sec-build">You'll add <b>the two things MCP Apps adds</b> to a server: a <code>ui://</code> resource with the view's HTML, and a tool that points at it. By the end, calling <code>get_summary</code> mounts your view in the workshop host.</div>
+<div class="sec-meta"><span>server/server.ts</span></div>
 
 <!--
 0:23. From here on, every section has the same rhythm. This one is short: two small server changes.
@@ -701,7 +717,7 @@ layout: section
 
 ---
 
-# Three parts
+# The three parts of an MCP App: server, host, view
 
 <div class="grid grid-cols-11 gap-2 items-center mt-4">
 
@@ -736,7 +752,7 @@ layout: section
 
 ---
 
-# The step: 2.1 and 2.2
+# Steps 2.1 and 2.2: what you'll fill in
 
 <div class="grid grid-cols-2 gap-6 mt-2">
 
@@ -768,7 +784,7 @@ layout: section
 class: dense
 ---
 
-# 2.1 · The view is a resource
+# 2.1 · Register the view as a ui:// resource
 
 <div class="file"><b>server/server.ts</b> · resources</div>
 
@@ -790,7 +806,7 @@ registerAppResource(
 );
 ```
 
-<div class="grid grid-cols-3 gap-3 mt-3 text-sm">
+<div class="grid grid-cols-3 gap-3 mt-2 text-sm">
   <div class="ed-card"><b>Why a resource?</b> A stable URI the host can fetch early, cache, and review before anything runs.</div>
   <div class="ed-card"><b><code>profile=mcp-app</code></b> says: render me in a sandbox and talk to me. Plain <code>text/html</code> would show as text.</div>
   <div class="ed-card"><b>Why one file?</b> The sandbox has no URL to load scripts from. <code>vite-plugin-singlefile</code> inlines all JS and CSS.</div>
@@ -806,7 +822,7 @@ The _meta.ui.csp you saw on the wire comes later, in 5.3.
 class: dense
 ---
 
-# 2.2 · The tool points at it
+# 2.2 · Point get_summary at the view
 
 <div class="file"><b>server/server.ts</b> · tools, trimmed</div>
 
@@ -843,24 +859,9 @@ Optional mention: getUiCapability(clientCapabilities) from ext-apps/server tells
 
 ---
 
-# What the host does with it
+# How the host finds, reads and mounts the view
 
-```mermaid {scale: 0.82}
-sequenceDiagram
-    participant Y as You (playing the model)
-    participant H as Workshop host
-    participant S as Expensify server
-    participant V as View (iframe)
-    H->>S: tools/list
-    S-->>H: get_summary { _meta.ui.resourceUri }
-    Y->>H: Call get_summary
-    H->>S: tools/call get_summary
-    S-->>H: content + structuredContent
-    H->>S: resources/read ui://expensify/dashboard.html
-    S-->>H: text/html;profile=mcp-app
-    H->>V: mount in the sandbox
-    Note over V: "Waiting for the host…"<br/>It can't talk yet. Section 3.
-```
+<img src="/host-mounts-view.svg" class="diagram" style="max-height: 410px" alt="Sequence: at connect the workshop host sends server/discover and tools/list to the Expensify server, and learns get_summary has _meta.ui.resourceUri. You call get_summary; the host sends tools/call, then resources/read ui://expensify/dashboard.html, gets text/html;profile=mcp-app, and mounts it in the sandbox. The view shows Waiting for the host." />
 
 <!--
 0:30. Fill time starts after this slide. Put this slide back up while they work.
@@ -869,11 +870,12 @@ Note the order: the workshop host calls the tool, then reads the resource. A rea
 
 ---
 
-# Read the traffic: section 2
+# Read the traffic: the host reads your view
 
 <div class="text-sm text-gray-400 mb-3">Call <code>get_summary</code> in the host. In the protocol log, filter to <b>server</b>:</div>
 
 <div class="plog">
+  <div><span class="leg">server →</span><span class="m">server/discover</span><span class="why">first, at connect: what the server has</span></div>
   <div><span class="leg">server →</span><span class="m">tools/list</span><span class="why">find <code>_meta.ui.resourceUri</code> on get_summary</span></div>
   <div><span class="leg">server →</span><span class="m">tools/call get_summary</span><span class="why">the same call as in Inspector</span></div>
   <div class="new"><span class="leg">server →</span><span class="m">resources/read ui://expensify/…</span><span class="why">new: the host fetches your view</span></div>
@@ -896,13 +898,13 @@ Checkpoint: anyone not seeing an iframe runs npm run solution, then npm run go 3
 layout: section
 ---
 
-<div class="sec-num">3</div>
+<div class="kicker">Section 3 · 0:38 · 33 min · steps 3.1 to 3.4</div>
 
-# Understand the SDK, then fill the gaps
+# Connect the view to the host with useApp
 
-<div class="sec-meta"><span class="hot">0:38</span><span>33 min</span><span>steps 3.1 – 3.4</span><span>ui/mcp-app.tsx</span></div>
+<div class="sec-build">Run the MCP Apps handshake, read the model's arguments, render the server's answer and follow the host's theme. By the end: the dashboard, with real totals.</div>
 
-<div class="sec-build">The view gets a voice. You'll <b>connect it to the host with <code>useApp</code></b>, read the model's arguments, render the server's answer, and follow the host's theme. By the end: the dashboard, with real totals.</div>
+<div class="sec-meta"><span>ui/mcp-app.tsx</span></div>
 
 <!--
 0:38. The main block. About 12 minutes of understanding first, then 4 steps of filling. If this runs long, 3.4 can be shown on stage instead of filled.
@@ -911,7 +913,7 @@ MUST-SAY CORE if short on time: the handshake, listeners before connect, content
 
 ---
 
-# The step: 3.1 to 3.4
+# Steps 3.1 to 3.4: what you'll fill in
 
 <div class="grid grid-cols-2 gap-6 mt-2">
 
@@ -940,7 +942,7 @@ MUST-SAY CORE if short on time: the handshake, listeners before connect, content
 
 ---
 
-# Four entry points, one package
+# The four ext-apps entry points and what each is for
 
 <div class="text-sm text-gray-400 mb-2">All from <code>@modelcontextprotocol/ext-apps</code> 2.0.3:</div>
 
@@ -959,7 +961,7 @@ MUST-SAY CORE if short on time: the handshake, listeners before connect, content
 
 ---
 
-# The view is a client of the host
+# The view talks to the host over postMessage
 
 <div class="grid grid-cols-5 gap-6 mt-2">
 
@@ -976,6 +978,8 @@ await app.connect(transport);
 ```
 
 <div class="mt-3 text-sm text-gray-400"><code>connect()</code> sends <code>ui/initialize</code>, waits for the host's answer, then sends <code>ui/notifications/initialized</code>.</div>
+
+<div class="mt-3 text-sm ed-card ed-card--warn"><b>A different handshake.</b> MCP 2026-07-28 dropped its own, between host and server. <code>ui/initialize</code> belongs to MCP Apps, between view and host, and stays.</div>
 </div>
 
 <div class="col-span-2 text-sm space-y-3">
@@ -988,20 +992,21 @@ await app.connect(transport);
 
 <!--
 0:41. useApp is a thin React wrapper around exactly these three lines. Show the vanilla version so the hook isn't magic.
+Say the yellow card out loud: people who read the MCP changelog will ask "didn't they remove the handshake?" They removed MCP's, between host and server. The view still introduces itself to the host with ui/initialize, because it needs the host context and capabilities before it renders.
 -->
 
 ---
 class: dense
 ---
 
-# From question to rendered view
+# From the user's question to the rendered view
 
-<img src="/lifecycle-render.svg" class="seq seq--tall" alt="Sequence: at connect the host lists tools. The user asks; the host calls get_summary, reads the view, mounts it, the view initializes, receives tool-input, then tool-result, and host-context-changed any time after." />
+<img src="/lifecycle-render.svg" class="diagram" style="max-height: 430px" alt="Sequence: at connect the host lists tools. The user asks; the host calls get_summary, reads the view, mounts it, the view initializes, receives tool-input, then tool-result, and host-context-changed any time after." />
 
 <!--
 0:42. Walk it top to bottom, and name the step that handles each arrow.
 1. Mount: the host does not wait for the result. The view can show a loading state.
-2. Handshake: ui/initialize (3.1), the host answers with hostContext and capabilities, the view says initialized.
+2. Handshake: ui/initialize (3.1), the host answers with hostContext and capabilities, the view sends ui/notifications/initialized. This is the MCP Apps handshake (spec 2026-01-26), view to host. Host to server there is none: that leg is MCP 2026-07-28.
 3. tool-input (3.2): the arguments the model chose. Can arrive before the server answers.
 4. tool-result (3.3): the same result the server sent the host.
 5. host-context-changed (3.4): any time later. Theme flip, resize, display mode.
@@ -1011,7 +1016,7 @@ class: dense
 class: dense
 ---
 
-# 3.1 · useApp
+# 3.1 · Connect to the host with useApp
 
 <div class="file"><b>ui/mcp-app.tsx</b> · ExpensifyApp, trimmed</div>
 
@@ -1037,7 +1042,7 @@ if (!ready) return <Notice>{waitingFor(range, groupBy)}</Notice>;
 </div>
 
 <!--
-0:44. The one idea that bites everyone: timing. onAppCreated runs after new App() and before connect(). The host sends tool-input and tool-result right after initialized. If you add listeners in a useEffect after app arrives, they're already gone.
+0:44. The one idea that bites everyone: timing. onAppCreated runs after new App() and before connect(). The host sends tool-input and tool-result right after ui/notifications/initialized. If you add listeners in a useEffect after app arrives, they're already gone.
 Live option: comment out a listener in the solution, call the tool, and show the log has tool-result but the view sits on "Connected. Waiting…".
 -->
 
@@ -1045,7 +1050,7 @@ Live option: comment out a listener in the solution, call the tool, and show the
 class: dense
 ---
 
-# 3.2 · What the model asked for
+# 3.2 · Read the model's arguments from toolinput
 
 <div class="grid grid-cols-5 gap-5">
 
@@ -1086,7 +1091,7 @@ Input usually arrives while the tool is still running. Partial input is optional
 class: dense
 ---
 
-# 3.3 · What the server answered
+# 3.3 · Render structuredContent from toolresult
 
 <div class="file"><b>ui/mcp-app.tsx</b> · inside onAppCreated</div>
 
@@ -1123,7 +1128,7 @@ After this step, the dashboard renders with real totals. That's the moment the r
 class: dense
 ---
 
-# 3.4 · Where the view lives
+# 3.4 · Track the host context: theme, size, locale
 
 <div class="grid grid-cols-9 gap-5">
 
@@ -1171,7 +1176,7 @@ In this step the visible effect is light and dark: tenet-ui reads data-color-mod
 
 ---
 
-# Read the traffic: section 3
+# Read the traffic: the view's handshake and notifications
 
 <div class="text-sm text-gray-400 mb-3">Call <code>get_summary</code> with <code>{"from": "2026-10-01", "groupBy": "merchant"}</code>. Filter to <b>view</b>:</div>
 
@@ -1201,7 +1206,7 @@ layout: center
 class: text-center
 ---
 
-# Break · 10 minutes
+# Break: 10 minutes
 
 <div class="text-xl text-gray-400 mt-4">Behind? <code>npm run solution</code>, then after the break <code>npm run go 4.1</code></div>
 
@@ -1215,13 +1220,13 @@ class: text-center
 layout: section
 ---
 
-<div class="sec-num">4</div>
+<div class="kicker">Section 4 · 1:21 · 27 min · steps 4.1 to 4.4</div>
 
-# Make it interactive
+# Make the view interactive
 
-<div class="sec-meta"><span class="hot">1:21</span><span>27 min</span><span>steps 4.1 – 4.4</span><span>ui/data.ts · ui/chat.ts · server/server.ts</span></div>
+<div class="sec-build">Clicks call the server through the host, a button hands a question to the chat, a tool the model can't see deletes a row, and a context update keeps the model's numbers right.</div>
 
-<div class="sec-build">The user takes over from the model. You'll make <b>clicks call the server through the host</b>, hand a question back to the chat, delete with a tool the model can't see, and keep the model's numbers fresh.</div>
+<div class="sec-meta"><span>ui/data.ts</span><span>ui/chat.ts</span><span>server/server.ts</span></div>
 
 <!--
 1:21. Welcome back. Everyone should be on 4.1 with a rendering dashboard. If not, npm run go 4.1 loads the 3.4 solution as the starting point.
@@ -1229,7 +1234,7 @@ layout: section
 
 ---
 
-# The step: 4.1 to 4.4
+# Steps 4.1 to 4.4: what you'll fill in
 
 <div class="grid grid-cols-2 gap-6 mt-2">
 
@@ -1257,22 +1262,11 @@ layout: section
 
 ---
 
-# The request path
+# A click's tools/call goes view, host, server
 
-```mermaid {scale: 0.82}
-sequenceDiagram
-    participant U as You
-    participant V as View
-    participant H as Host
-    participant S as Expensify server
-    U->>V: picks "This month"
-    V->>H: tools/call get_summary  (view leg, id 3)
-    Note over H: may refuse: unknown tool,<br/>not this server's, user said no
-    H->>S: tools/call get_summary  (server leg, id 7)
-    S-->>H: result (id 7)
-    H-->>V: result (id 3)
-    Note over U,S: No model in this loop. No tokens, no turn.
-```
+<img src="/request-path.svg" class="diagram" style="max-height: 300px" alt="Sequence: you pick This month in the view; the view sends tools/call get_summary to the host with id 3; the host may refuse; the host sends its own tools/call get_summary to the Expensify server with id 7; the result comes back with id 7, and the host answers the view with id 3." />
+
+<div v-click class="big-line big-line--sm mt-6 text-center">No model in this loop. <em>No tokens, no turn.</em></div>
 
 <!--
 1:23. Two separate requests, two different ids. Point that out now, because they will see it in the log.
@@ -1283,7 +1277,7 @@ To the server this looks like any other tools/call: it can't tell the view from 
 class: dense
 ---
 
-# 4.1 · callServerTool
+# 4.1 · Refetch on a click with callServerTool
 
 <div class="file"><b>ui/data.ts</b></div>
 
@@ -1315,7 +1309,7 @@ export async function getSummary(app: App, range: DateRange, groupBy: GroupBy): 
 class: dense
 ---
 
-# 4.2 · Hand it to the model
+# 4.2 · Ask the model with sendMessage
 
 <div class="grid grid-cols-2 gap-5">
 
@@ -1358,7 +1352,7 @@ updateModelContext is 4.4. Introduce it now so the contrast lands.
 class: dense
 ---
 
-# 4.3 · A tool only the view can call
+# 4.3 · delete_expense, a tool only the view can call
 
 <div class="grid grid-cols-2 gap-5">
 
@@ -1413,7 +1407,7 @@ In the workshop host, delete_expense disappears from the tool picker: the picker
 class: dense
 ---
 
-# 4.4 · Tell the model what changed
+# 4.4 · Report deletions with updateModelContext
 
 <div class="file"><b>ui/chat.ts</b> · reportDeletions</div>
 
@@ -1447,9 +1441,9 @@ await reportDeletions(app, deleted.current).catch(() => {});
 class: dense
 ---
 
-# Then the user takes over
+# Every message the view sends in section 4
 
-<img src="/lifecycle-interact.svg" class="seq seq--tall" alt="Sequence: the user picks This month and the view calls get_summary through the host. The user clicks Ask and the view sends ui/message. The user clicks Delete, the view calls the app-only delete_expense, and updates the model context." />
+<img src="/lifecycle-interact.svg" class="diagram" style="max-height: 400px" alt="Sequence: the user picks This month and the view calls get_summary through the host. The user clicks Ask and the view sends ui/message. The user clicks Delete, the view calls the app-only delete_expense, and updates the model context." />
 
 <!--
 1:43. The whole section on one picture, after they've written it. The model is in exactly one place: the ui/message. Everything else is view, host, server.
@@ -1457,7 +1451,7 @@ class: dense
 
 ---
 
-# The rest of the App surface
+# Other App methods: openLink, requestDisplayMode and more
 
 | Method | Message | For |
 |---|---|---|
@@ -1476,7 +1470,7 @@ class: dense
 
 ---
 
-# Read the traffic: section 4
+# Read the traffic: view calls, messages, context updates
 
 <div class="plog">
   <div class="new"><span class="leg">view →</span><span class="m">tools/call get_summary</span><span class="why">a date preset; note the id</span></div>
@@ -1502,13 +1496,13 @@ Behind: npm run solution, then npm run go 5.1.
 layout: section
 ---
 
-<div class="sec-num">5</div>
+<div class="kicker">Section 5 · 1:48 · 20 min · steps 5.1 to 5.3</div>
 
-# Make it look native
+# Theme the view with the host's styles
 
-<div class="sec-meta"><span class="hot">1:48</span><span>20 min</span><span>steps 5.1 – 5.3</span><span>mcp-app.tsx · host-bridge.ts · server.ts</span></div>
+<div class="sec-build">Apply the host's colours and fonts, map them onto tenet-ui's tokens, then load one web font through the sandbox's CSP. One build that looks at home in every host.</div>
 
-<div class="sec-build">One build that looks at home in every host. You'll <b>wear the host's colours and fonts</b>, map them onto a small design system (tenet-ui), then load one web font through the sandbox's CSP.</div>
+<div class="sec-meta"><span>ui/mcp-app.tsx</span><span>ui/host-bridge.ts</span><span>server/server.ts</span></div>
 
 <!--
 1:48. Keep the Host theme menu and the sun/moon toggle in view for the whole section. By the end, the dashboard follows all four presets in light and dark.
@@ -1516,7 +1510,7 @@ layout: section
 
 ---
 
-# The step: 5.1 to 5.3
+# Steps 5.1 to 5.3: what you'll fill in
 
 <div class="grid grid-cols-2 gap-6 mt-2">
 
@@ -1545,7 +1539,7 @@ layout: section
 class: dense
 ---
 
-# 5.1 · Wear the host's clothes
+# 5.1 · Apply the host's theme with useHostStyles
 
 <div class="grid grid-cols-2 gap-5">
 
@@ -1592,7 +1586,7 @@ const padding: CSSProperties = {
 class: dense
 ---
 
-# 5.2 · Map your design system to the host
+# 5.2 · Map tenet-ui tokens to the host's variables
 
 <div class="file"><b>ui/host-bridge.ts</b> · trimmed</div>
 
@@ -1626,7 +1620,7 @@ export function bridgeHostTheme(context: McpUiHostContext | undefined, root = do
 
 ---
 
-# The sandbox: five layers
+# Five security layers around the view
 
 | An attacker wants to | The layer that stops it |
 |---|---|
@@ -1647,7 +1641,7 @@ The double iframe: the outer proxy is on a different origin from the host, so ev
 class: dense
 ---
 
-# 5.3 · Open the CSP, on purpose
+# 5.3 · Allow Google Fonts in the view's CSP
 
 <div class="grid grid-cols-2 gap-5">
 
@@ -1697,7 +1691,7 @@ OFFLINE: if the venue Wi-Fi is down, the font can't load even after the fix. The
 
 ---
 
-# Read the traffic: section 5
+# Read the traffic: a CSP violation and theme changes
 
 <div class="plog">
   <div class="new"><span class="leg">view →</span><span class="m">workshop/csp-violation</span><span class="why">before 5.3: names <code>fonts.googleapis.com</code></span></div>
@@ -1723,13 +1717,13 @@ Checkpoint: npm run go 6.1.
 layout: section
 ---
 
-<div class="sec-num">6</div>
+<div class="kicker">Section 6 · 2:08 · 8 min · step 6.1</div>
 
-# Deploy it
+# Deploy the server to a public URL
 
-<div class="sec-meta"><span class="hot">2:08</span><span>8 min</span><span>step 6.1</span><span>server/worker.ts</span><span>follow along or watch</span></div>
+<div class="sec-build">The same server, from localhost to a public HTTPS URL on Cloudflare Workers' free plan. Follow along or watch. That URL is what section 7 plugs into every host.</div>
 
-<div class="sec-build">The same server, from localhost to <b>a public HTTPS URL</b> on Cloudflare Workers' free plan. That URL is what section 7 plugs into every host.</div>
+<div class="sec-meta"><span>server/worker.ts</span></div>
 
 <!--
 2:08. Short and practical. Only people with a free Cloudflare account deploy; everyone else fills 6.1, runs the tests, and watches.
@@ -1739,7 +1733,7 @@ layout: section
 class: dense
 ---
 
-# 6.1 · One server, two entries
+# 6.1 · One createServer, two entry points: Node and Workers
 
 <div class="grid grid-cols-5 gap-5">
 
@@ -1767,13 +1761,7 @@ export default {
 
 <div class="col-span-2">
 
-```mermaid {scale: 0.75}
-graph TB
-    CS["createServer()<br/>server.ts"] --> H["createMcpHandler<br/>Request in, Response out"]
-    H --> N["http.ts<br/>Node, :3001"]
-    H --> W["worker.ts<br/>Cloudflare Workers"]
-    style CS fill:#c2502e,color:#fff
-```
+<img src="/server-entries.svg" class="diagram" style="max-height: 230px" alt="createServer in server.ts feeds createMcpHandler, Request in and Response out, which both http.ts on Node port 3001 and worker.ts on Cloudflare Workers call with fetch." />
 
 <div class="mt-2 text-sm space-y-2">
   <div class="ed-card"><b>Stateless</b> Streamable HTTP: any instance, anywhere, can answer any request.</div>
@@ -1789,7 +1777,7 @@ graph TB
 
 ---
 
-# Ship it
+# Deploy to Cloudflare Workers with wrangler
 
 <div class="cue mt-2">
   <div><code>npx wrangler login</code> · once per machine, free account, no card</div>
@@ -1813,13 +1801,11 @@ Say clearly: this deploy has no login and demo data. Anyone with the URL can del
 layout: section
 ---
 
-<div class="sec-num">7</div>
+<div class="kicker">Section 7 · 2:16 · 8 min · optional demo</div>
 
-# One app, every host
+# Run the same build in Claude, ChatGPT, VS Code and Gemini
 
-<div class="sec-meta"><span class="hot">2:16</span><span>8 min</span><span class="hot">optional</span><span>demo from the stage</span></div>
-
-<div class="sec-build">The payoff: <b>one build, no changes, no adapters</b>, in every host that renders MCP Apps. Same prompt every time: "How much did I spend this month?"</div>
+<div class="sec-build">One build, no changes, no adapters, in every host that renders MCP Apps. Same prompt every time: "How much did I spend this month?"</div>
 
 <!--
 2:16. FIRST THING TO CUT if late: drop to two hosts, or skip to the wrap. Nobody follows along; watch.
@@ -1829,7 +1815,7 @@ Point out while switching: theme variables differ, display modes differ, contain
 
 ---
 
-# Claude <span class="badge">optional</span>
+# Add the server to Claude as a custom connector <span class="badge">optional</span>
 
 <div class="cue mt-2">
   <div><b>Customize › Connectors › Add custom connector</b></div>
@@ -1851,7 +1837,7 @@ Point out while switching: theme variables differ, display modes differ, contain
 
 ---
 
-# ChatGPT <span class="badge">optional</span>
+# Add the server to ChatGPT as a custom MCP server <span class="badge">optional</span>
 
 <div class="cue mt-2">
   <div><b>chatgpt.com/plugins</b> › <b>+</b> › <b>Add custom MCP server</b></div>
@@ -1871,7 +1857,7 @@ Point out while switching: theme variables differ, display modes differ, contain
 
 ---
 
-# VS Code with GitHub Copilot <span class="badge">optional</span>
+# Add the server to VS Code with .vscode/mcp.json <span class="badge">optional</span>
 
 <div class="grid grid-cols-2 gap-5 mt-2">
 
@@ -1904,7 +1890,7 @@ Point out while switching: theme variables differ, display modes differ, contain
 
 ---
 
-# Gemini <span class="badge">optional</span> <span class="badge">to confirm</span>
+# Gemini: where to add the server, and whether it renders <span class="badge">optional</span> <span class="badge">to confirm</span>
 
 <div class="grid grid-cols-2 gap-5 mt-2 text-sm">
 
@@ -1928,15 +1914,15 @@ Others if time allows: Goose, Cursor, Postman, MCPJam (all on the official MCP A
 
 ---
 
-# Rules for good MCP Apps
+# Six rules for good MCP Apps
 
 <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-  <div v-click class="p-3 bg-gray-800 rounded"><b class="text-blue-400">Text still matters</b><br/><span class="text-gray-400">Always return useful <code>content</code>. The model reads it, and so does every host without UI.</span></div>
-  <div v-click class="p-3 bg-gray-800 rounded"><b class="text-blue-400">Tell the model the user can see it</b><br/><span class="text-gray-400">Say so in the description, or it narrates the chart.</span></div>
-  <div v-click class="p-3 bg-gray-800 rounded"><b class="text-blue-400">Don't race the model</b><br/><span class="text-gray-400">Render the result you were given. Fetch only on a click.</span></div>
-  <div v-click class="p-3 bg-gray-800 rounded"><b class="text-blue-400">Keep the model in sync</b><br/><span class="text-gray-400">After a user edit, <code>updateModelContext</code>, with the whole picture.</span></div>
-  <div v-click class="p-3 bg-gray-800 rounded"><b class="text-blue-400">Belong to the host</b><br/><span class="text-gray-400">Host variables, with your design system as the fallback.</span></div>
-  <div v-click class="p-3 bg-gray-800 rounded"><b class="text-blue-400">Never trust the view</b><br/><span class="text-gray-400">Checks live in the tool handler. Declare the least CSP you need.</span></div>
+  <div v-click class="ed-card"><div class="kicker">Text still matters</div><div class="mt-1 text-gray-400">Always return useful <code>content</code>. The model reads it, and so does every host without UI.</div></div>
+  <div v-click class="ed-card"><div class="kicker">Tell the model the user can see it</div><div class="mt-1 text-gray-400">Say so in the description, or it narrates the chart.</div></div>
+  <div v-click class="ed-card"><div class="kicker">Don't race the model</div><div class="mt-1 text-gray-400">Render the result you were given. Fetch only on a click.</div></div>
+  <div v-click class="ed-card"><div class="kicker">Keep the model in sync</div><div class="mt-1 text-gray-400">After a user edit, <code>updateModelContext</code>, with the whole picture.</div></div>
+  <div v-click class="ed-card"><div class="kicker">Belong to the host</div><div class="mt-1 text-gray-400">Host variables, with your design system as the fallback.</div></div>
+  <div v-click class="ed-card"><div class="kicker">Never trust the view</div><div class="mt-1 text-gray-400">Checks live in the tool handler. Declare the least CSP you need.</div></div>
 </div>
 
 <!--
@@ -1947,7 +1933,7 @@ Others if time allows: Goose, Cursor, Postman, MCPJam (all on the official MCP A
 class: dense
 ---
 
-# Cheat sheet
+# Cheat sheet: server helpers, view API, messages
 
 <div class="grid grid-cols-3 gap-4 text-xs">
 
@@ -1991,7 +1977,7 @@ class: dense
 
 </div>
 
-<div class="mt-4 text-sm text-gray-400">MIME type <code>text/html;profile=mcp-app</code> · extension <code>io.modelcontextprotocol/ui</code> · spec 2026-01-26</div>
+<div class="mt-4 text-sm text-gray-400">MIME type <code>text/html;profile=mcp-app</code> · extension <code>io.modelcontextprotocol/ui</code> · MCP Apps spec 2026-01-26 · MCP protocol 2026-07-28</div>
 
 <!--
 2:27. Leave this up during Q&A. Tell them to photograph it.
@@ -1999,13 +1985,13 @@ class: dense
 
 ---
 
-# Take it further
+# Docs, examples and agent skills to keep going
 
 <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-  <div class="p-4 bg-gray-800 rounded"><b class="text-blue-400">Docs and API</b><br/><span class="text-gray-400">apps.extensions.modelcontextprotocol.io</span></div>
-  <div class="p-4 bg-gray-800 rounded"><b class="text-blue-400">Spec and examples</b><br/><span class="text-gray-400">github.com/modelcontextprotocol/ext-apps · <code>basic-host</code>, and starters for React, Vue, Svelte, Preact, Solid, vanilla</span></div>
-  <div class="p-4 bg-gray-800 rounded"><b class="text-blue-400">Agent skills</b><br/><span class="text-gray-400"><code>create-mcp-app</code>, <code>add-app-to-server</code>, <code>convert-web-app</code>, <code>migrate-oai-app</code></span></div>
-  <div class="p-4 bg-gray-800 rounded"><b class="text-blue-400">This repo</b><br/><span class="text-gray-400">Every step, its solution, the workshop host, and DEPLOY.md. Run <code>npm run go 2.1</code> again at home.</span></div>
+  <div class="ed-card"><div class="kicker">Docs and API</div><div class="mt-1 text-gray-400">apps.extensions.modelcontextprotocol.io</div></div>
+  <div class="ed-card"><div class="kicker">Spec and examples</div><div class="mt-1 text-gray-400">github.com/modelcontextprotocol/ext-apps · <code>basic-host</code>, and starters for React, Vue, Svelte, Preact, Solid, vanilla</div></div>
+  <div class="ed-card"><div class="kicker">Agent skills</div><div class="mt-1 text-gray-400"><code>create-mcp-app</code>, <code>add-app-to-server</code>, <code>convert-web-app</code>, <code>migrate-oai-app</code></div></div>
+  <div class="ed-card"><div class="kicker">This repo</div><div class="mt-1 text-gray-400">Every step, its solution, the workshop host, and DEPLOY.md. Run <code>npm run go 2.1</code> again at home.</div></div>
 </div>
 
 <!--
@@ -2031,13 +2017,11 @@ class: text-center
 layout: section
 ---
 
-<div class="kicker">Stretch goal · only if time is left</div>
+<div class="kicker">Stretch goal · 4 to 8 min · only if time is left</div>
 
-# A2UI
+# A2UI: UI as data instead of HTML
 
-<div class="sec-meta"><span class="hot">4–8 min</span><span>no code</span><span>a different answer to the same question</span></div>
-
-<div class="sec-build">MCP Apps ships <b>your HTML</b> in a sandbox. A2UI ships <b>a description of a UI</b>, and the host draws it with its own components. Who owns the look? Who owns the logic?</div>
+<div class="sec-build">MCP Apps ships your HTML in a sandbox. A2UI ships a description of a UI, and the host draws it with its own components. Who owns the look? Who owns the logic?</div>
 
 <!--
 STRETCH. Only if the earlier sections came in early. 4 to 8 minutes.
@@ -2052,12 +2036,12 @@ Sources (checked Oct 2026):
 class: dense tight
 ---
 
-# A2UI: a UI as data <span class="badge">stretch</span>
+# An A2UI v0.9 stream for an Expensify card <span class="badge">stretch</span>
 
 <div class="grid grid-cols-5 gap-5">
 
 <div class="col-span-3">
-<div class="dir"><b>agent → client</b> · A2UI v0.9, an Expensify card</div>
+<div class="dir"><b>agent → client</b> · A2UI v0.9 shape from a2ui.org, written for this slide</div>
 
 ```json
 {"version": "v0.9", "createSurface": {
@@ -2093,7 +2077,6 @@ class: dense tight
 
 </div>
 
-<div class="src mt-1">Shape from the A2UI v0.9 spec (a2ui.org). Written for this slide, not from the workshop code.</div>
 
 <!--
 Walk the three messages: create a surface with a catalog, describe the components, fill the data model. The client (Angular, Flutter, Lit, React renderers exist) draws Column, Text, Button with its own widgets.
@@ -2104,7 +2087,7 @@ v0.9.1 is current; v1.0 is a candidate that adds client-to-server RPC and action
 class: dense
 ---
 
-# Two models, side by side <span class="badge">stretch</span>
+# MCP Apps and A2UI compared <span class="badge">stretch</span>
 
 | | MCP Apps | A2UI |
 |---|---|---|
@@ -2115,7 +2098,7 @@ class: dense
 | Security | sandbox, separate origin, CSP, host gating | no code executes; only trusted components |
 | Who writes it | a developer, ahead of time | often the model, at run time |
 | Protocol | MCP extension `io.modelcontextprotocol/ui` | its own spec, over A2A, MCP, AG-UI and more |
-| Status | spec 2026-01-26, SDK 2.x | v0.9.1 current, v1.0 candidate |
+| Status | spec 2026-01-26 on MCP 2026-07-28, ext-apps 2.0.3 | v0.9.1 current, v1.0 candidate |
 
 <!--
 The one-line version: MCP Apps trusts the sandbox, A2UI trusts the catalog.
@@ -2123,17 +2106,17 @@ The one-line version: MCP Apps trusts the sandbox, A2UI trusts the catalog.
 
 ---
 
-# When to pick which <span class="badge">stretch</span>
+# When to use MCP Apps and when to use A2UI <span class="badge">stretch</span>
 
 <div class="grid grid-cols-2 gap-6 mt-4 text-sm">
 
-<div class="p-5 bg-blue-900 bg-opacity-20 rounded-lg border border-blue-500">
-  <div class="text-lg font-bold text-blue-400">MCP Apps</div>
+<div class="ed-card ed-card--accent">
+  <div class="kicker">MCP Apps</div>
   <div class="mt-2">You have a real UI: a chart you click, a table you edit, a map, a PDF viewer. You want your brand and your component library. A developer builds it once.</div>
 </div>
 
-<div class="p-5 bg-green-900 bg-opacity-20 rounded-lg border border-green-500">
-  <div class="text-lg font-bold text-green-400">A2UI</div>
+<div class="ed-card ed-card--good">
+  <div class="kicker">A2UI</div>
   <div class="mt-2">The agent composes small, one-off UI on the fly: a form, a confirmation, a card. You want it to look exactly native, on web and mobile, with no code to review.</div>
 </div>
 

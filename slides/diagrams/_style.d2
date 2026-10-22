@@ -1,4 +1,6 @@
-# Shared Editorial Ink palette for the deck's sequence diagrams.
+# Shared Editorial Ink palette for every diagram in the deck.
+# Same conventions as the design-system-mcp talk: sketch mode, theme 200 with ink overrides, dagre layout.
+# Sequence diagrams use actor / ours / msg / key / group / note. Box diagrams use box / client / wire / hotwire.
 vars: {
   d2-config: {
     sketch: true
@@ -30,33 +32,65 @@ style.fill: "#14110d"
 
 classes: {
   actor: {
-    style.font-size: 36
+    style.font-size: 46
     style.font-color: "#fbf7f0"
     style.fill: "#2a241b"
     style.stroke: "#574b39"
   }
   ours: {
-    style.font-size: 36
+    style.font-size: 46
     style.font-color: "#fbf7f0"
     style.fill: "#3a2117"
     style.stroke: "#d9744e"
   }
   msg: {
-    style.font-size: 34
+    style.font-size: 46
     style.font-color: "#f4eee3"
     style.stroke: "#b6a78d"
     style.stroke-width: 2
   }
   key: {
-    style.font-size: 35
+    style.font-size: 48
     style.font-color: "#e9a487"
     style.stroke: "#d9744e"
     style.stroke-width: 4
   }
   group: {
-    style.font-size: 22
+    style.font-size: 34
     style.font-color: "#dcc06a"
     style.fill: "#1a1712"
     style.stroke: "#4d3c1c"
+  }
+  note: {
+    style.font-size: 40
+    style.font-color: "#dcc06a"
+    style.fill: "#332813"
+    style.stroke: "#4d3c1c"
+  }
+  box: {
+    style.font-size: 44
+    style.font-color: "#fbf7f0"
+    style.fill: "#2a241b"
+    style.stroke: "#574b39"
+    style.border-radius: 8
+  }
+  client: {
+    style.font-size: 40
+    style.font-color: "#fbf7f0"
+    style.fill: "#211d17"
+    style.stroke: "#807156"
+    style.border-radius: 8
+  }
+  wire: {
+    style.font-size: 34
+    style.font-color: "#b6a78d"
+    style.stroke: "#b6a78d"
+    style.stroke-width: 3
+  }
+  hotwire: {
+    style.font-size: 36
+    style.font-color: "#e9a487"
+    style.stroke: "#d9744e"
+    style.stroke-width: 5
   }
 }

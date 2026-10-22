@@ -1,0 +1,18 @@
+...@_style
+direction: down
+
+cs: "createServer()\nserver.ts" {
+  style.font-size: 44
+  style.font-color: "#fbf7f0"
+  style.fill: "#3a2117"
+  style.stroke: "#d9744e"
+  style.stroke-width: 4
+  style.border-radius: 8
+}
+h: "createMcpHandler\nRequest in, Response out" {class: box}
+n: "http.ts\nNode · :3001" {class: client}
+w: "worker.ts\nCloudflare Workers" {class: client}
+
+cs -> h {class: hotwire}
+h -> n: "fetch" {class: wire}
+h -> w: "fetch" {class: wire}

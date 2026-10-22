@@ -1,0 +1,32 @@
+...@_style
+direction: right
+
+host: "HOST · Claude, ChatGPT, VS Code, the workshop host" {
+  style.font-size: 38
+  style.font-color: "#e9a487"
+  style.fill: "#1a1712"
+  style.stroke: "#5a3320"
+  style.stroke-dash: 6
+  style.border-radius: 14
+
+  model: "Model\nchooses a tool" {class: box}
+  c1: "MCP client" {class: client}
+  c2: "MCP client" {class: client}
+  model -> c1 {class: wire}
+  model -> c2 {class: wire}
+}
+
+ours: "SERVER · what we build" {
+  style.font-size: 38
+  style.font-color: "#e9a487"
+  style.fill: "#3a2117"
+  style.stroke: "#d9744e"
+  style.stroke-width: 4
+  style.border-radius: 14
+  mcp: "Expensify\nlocalhost:3001/mcp" {class: box}
+}
+
+other: "Another server" {class: box}
+
+host.c1 -> ours.mcp: "tools/call" {class: hotwire}
+host.c2 -> other: "JSON-RPC" {class: wire}

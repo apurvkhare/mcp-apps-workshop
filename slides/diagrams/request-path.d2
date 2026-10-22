@@ -1,0 +1,14 @@
+...@_style
+shape: sequence_diagram
+
+you: "You" {class: actor}
+view: "View" {class: ours}
+host: "Host" {class: actor}
+mcp: "Expensify server" {class: ours}
+
+you -> view: "picks This month" {class: msg}
+view -> host: "tools/call get_summary   id 3" {class: key}
+host.n: "may refuse: unknown tool,\nanother server's, user said no" {class: note}
+host -> mcp: "tools/call get_summary   id 7" {class: key}
+mcp -> host: "result   id 7" {class: msg}
+host -> view: "result   id 3" {class: msg}

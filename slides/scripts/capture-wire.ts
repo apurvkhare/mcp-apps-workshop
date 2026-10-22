@@ -1,6 +1,8 @@
 /**
  * Captures the real JSON-RPC traffic between an MCP client (SDK 2.3.1, declaring the MCP Apps
  * extension like a host does) and the finished Expensify server, in process, with no network.
+ * The client comes from shared/src/test-server.ts, which pins protocol 2026-07-28: the capture
+ * starts with server/discover, and every request carries the _meta envelope and mcp-* headers.
  * The section 1 slides quote this output, trimmed.
  *
  *   cd slides && npm run wire          (or: npx tsx slides/scripts/capture-wire.ts from the repo root)
