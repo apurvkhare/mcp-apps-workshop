@@ -16,7 +16,7 @@
     "test": "tsx scripts/test.ts",
     "start": "tsx scripts/start.ts",
     "dev": "tsx scripts/start.ts",
-    "inspect": "mcp-inspector --web --transport http --server-url http://localhost:3001/mcp",
+    "inspect": "mcp-inspector --web --transport http --server-url http://localhost:3001/mcp --protocol-era modern",
     "doctor": "tsx scripts/doctor.ts",
     "verify": "tsx scripts/verify.ts",
     "build": "vite build",
