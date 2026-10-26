@@ -38,7 +38,13 @@ npx wrangler login
 npm run deploy
 ```
 
-It prints a `https://expensify-mcp-app.<you>.workers.dev` URL. Your server is at that URL plus `/mcp`. To try it locally first, run `npx wrangler dev` and use `http://localhost:8787/mcp`.
+It prints a `https://expensify-mcp-app.<you>.workers.dev` URL. Your server is at that URL plus `/mcp`. Point the workshop host at it:
+
+```bash
+npm start -- --server https://expensify-mcp-app.<you>.workers.dev/mcp
+```
+
+To try it locally first, build the view with `npm run build` (or keep `npm start` running), then run `npx wrangler dev` and use `http://localhost:8787/mcp`. `worker.ts` imports `../dist/mcp-app.html`, and `npm run go` clears `dist`, so the build has to come first.
 
 ## Explain it back
 

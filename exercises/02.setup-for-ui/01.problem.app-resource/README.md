@@ -26,7 +26,7 @@ An MCP App adds exactly two things to a server: **a resource that holds the view
 
 ## 📡 In the protocol log
 
-Nothing in the workshop host yet: no tool points at the view, so the host never asks for it. To see it now, run `npm run inspect` (MCP Inspector) and open Resources: `ui://expensify/dashboard.html` is listed, and reading it returns the HTML.
+The host's `resources/list` at connect already lists `ui://expensify/dashboard.html`, but nothing reads it yet: no tool points at the view, so the host never asks for it. To see it now, run `npm run inspect` (MCP Inspector) and open Resources: `ui://expensify/dashboard.html` is listed, and reading it returns the HTML.
 
 ## What breaks without it
 

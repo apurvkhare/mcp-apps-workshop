@@ -27,7 +27,7 @@ const waitingFor = (range: DateRange, groupBy: GroupBy) =>
 
 export function ExpensifyApp() {
   // 🔨 3.4 Keep the host context in state: replace this line with a useState<McpUiHostContext | undefined>().
-  //    Then fill the two other 🔨 3.4 markers below, so it holds the first context and every change.
+  //    Then fill the two other 3.4 markers below, so it holds the first context and every change.
   // 🧠 McpUiHostContext is everything the host tells the view about where it is rendered: theme, styles,
   //    displayMode and availableDisplayModes, containerDimensions, locale, timeZone, safeAreaInsets, toolInfo.
   //    Every field is optional. Each host sends what it has.

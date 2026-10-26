@@ -6,7 +6,7 @@ This folder is the finished step. Every ✅ comment in the code marks work from 
 
 **Where:** `server/server.ts`: the 4.3 change on `delete_expense`. `ui/data.ts`: the 4.3 change in `deleteExpense`.
 
-**📡 In the protocol log:** The host's tool picker (which plays the model) no longer offers `delete_expense`. Click Delete on a row: `tools/call` from the view, then to the server, then a `get_summary` and a `list_expenses` to refresh.
+**📡 In the protocol log:** Reload the workshop host page (it reads `tools/list` once, when it loads), then look at the tool picker (which plays the model): it no longer offers `delete_expense`. Click Delete on a row: `tools/call` from the view, then to the server, then a `get_summary` and a `list_expenses` to refresh.
 
 ## Explain it back
 

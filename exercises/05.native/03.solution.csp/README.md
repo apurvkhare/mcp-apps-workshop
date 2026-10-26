@@ -6,7 +6,7 @@ This folder is the finished step. Every ✅ comment in the code marks work from 
 
 **Where:** `server/server.ts`: the 5.3 change in the view resource. The font link is already in `ui/mcp-app.html`.
 
-**📡 In the protocol log:** Before the fix: `workshop/csp-violation` from the view, naming `fonts.googleapis.com`. That message isn't part of MCP: the workshop host reports violations so you can see them. After the fix: none, and the dashboard headings switch to Newsreader.
+**📡 In the protocol log:** Before the fix: `workshop/csp-violation` from the view, naming `fonts.googleapis.com`. That message isn't part of MCP: the workshop host reports violations so you can see them. After the fix: none, and the dashboard headings switch to Newsreader. Offline, the violation still goes away, but the font itself only loads with internet.
 
 ## Explain it back
 

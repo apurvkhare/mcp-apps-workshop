@@ -18,7 +18,7 @@ A server can also ask whether the host renders views at all: `getUiCapability(cl
 
 ## 📡 In the protocol log
 
-Call `get_summary` in the host. On the host ⇄ server side: `tools/call`, then `resources/read` for `ui://expensify/dashboard.html`. The view renders and says "Waiting for the host…". Nothing comes from the view itself yet: it doesn't know how to talk. That's section 3.
+Reload the workshop host page (it reads `tools/list` once, when it loads), then call `get_summary`. On the host ⇄ server side: `tools/call`, then `resources/read` for `ui://expensify/dashboard.html`. The view renders and says "Waiting for the host…". Nothing comes from the view itself yet: it doesn't know how to talk. That's section 3.
 
 ## What breaks without it
 
@@ -26,7 +26,7 @@ The host shows the tool result as JSON, and no view.
 
 ## 🧪 Check it
 
-`npm test` checks `_meta.ui.resourceUri` in `tools/list`. Then `npm start` and call `get_summary`.
+`npm test` checks `_meta.ui.resourceUri` in `tools/list`. Then `npm start`, reload the workshop host page, and call `get_summary`.
 
 ## Explain it back
 

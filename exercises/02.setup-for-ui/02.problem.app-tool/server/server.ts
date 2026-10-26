@@ -53,7 +53,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
 
   // 🔨 2.2 Make get_summary an app tool, so a host renders the view under its result.
   //    Two edits: swap server.registerTool('get_summary', ...) for registerAppTool(server, 'get_summary', ...),
-  //    then fill the second 🔨 2.2 marker, inside the config below.
+  //    then fill the second 2.2 marker, inside the config below.
   // 💡 registerAppTool(server, name, config, handler): the same arguments as registerTool, with server first.
   // 🧠 registerAppTool is registerTool plus one convenience: it also copies resourceUri to the older
   //    flat key _meta["ui/resourceUri"], which hosts built before the spec settled still read.
@@ -81,7 +81,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
       //    (Add a comma after the annotations line above.)
       // 🧠 The tool result stays the same. The link lives on the tool, in tools/list, so a host knows
       //    which view to fetch before the tool even runs.
-      // 📡 Call get_summary in the host: resources/read for ui://expensify/dashboard.html follows tools/call.
+      // 📡 Reload the workshop host page (it reads tools/list once, when it loads), then call get_summary:
+      //    resources/read for ui://expensify/dashboard.html follows tools/call.
       // 🧪 npm test lists the tools and checks get_summary's _meta.ui.resourceUri.
     },
     async (args) => {

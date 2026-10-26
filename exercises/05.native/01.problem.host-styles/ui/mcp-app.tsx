@@ -84,6 +84,7 @@ export function ExpensifyApp() {
   // 📡 Switch the host theme preset: one host-context-changed carries the whole new set of variables.
   // 🧪 npm test checks useHostStyles gets the app and the context.
   // 📖 https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html (useHostStyles)
+
   // tenet-ui switches palettes with data-color-mode. The host says light or dark in hostContext.theme.
   useEffect(() => {
     document.documentElement.dataset.colorMode = hostContext?.theme ?? 'light';
@@ -203,7 +204,7 @@ function Dashboard({ app, hostContext, entry, initial }: DashboardProps) {
 
   // 🔨 5.1 (part 2) Pad the dashboard by hostContext.safeAreaInsets ({ top, right, bottom, left }, in pixels),
   //    so nothing hides under a phone's notch or the host's own controls.
-  // 💡 { paddingTop: insets?.top, ... } for all four sides.
+  // 💡 const insets = hostContext?.safeAreaInsets; then { paddingTop: insets?.top, ... } for all four sides.
   const padding: CSSProperties = {};
 
   return (

@@ -147,7 +147,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
   // 🧠 The view is a resource, not part of the tool result, so a host can fetch it ahead of time, cache it,
   //    and review it before anything runs. The MIME type "text/html;profile=mcp-app" is how a host knows
   //    this HTML is an MCP App to render in a sandbox, not a page to show as text.
-  // 📡 Nothing yet: no tool points at the view, so no host asks for it. Step 2.2 changes that.
+  // 📡 resources/list at connect already lists ui://expensify/dashboard.html, but nothing reads it yet:
+  //    no tool points at the view, so no host asks for it. Step 2.2 changes that.
   // 🧪 npm test reads ui://expensify/dashboard.html and checks its MIME type and HTML.
   // 📖 https://apps.extensions.modelcontextprotocol.io/api/modules/server-helpers.html
 

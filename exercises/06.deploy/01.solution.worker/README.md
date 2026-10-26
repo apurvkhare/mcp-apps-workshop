@@ -6,7 +6,7 @@ This folder is the finished step. Every ✅ comment in the code marks work from 
 
 **Where:** `server/worker.ts`: two 6.1 changes.
 
-**📡 In the protocol log:** Point the workshop host at your Worker (see "Deploy" below) and call `get_summary`: the same messages as on localhost.
+**📡 In the protocol log:** Point the workshop host at your Worker with `npm start -- --server https://expensify-mcp-app.<you>.workers.dev/mcp` (or `http://localhost:8787/mcp` for `npx wrangler dev`, after `npm run build`) and call `get_summary`: the same messages as on localhost.
 
 ## Explain it back
 

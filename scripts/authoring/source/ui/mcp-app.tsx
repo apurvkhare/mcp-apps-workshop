@@ -49,7 +49,7 @@ export function ExpensifyApp() {
   const [hostContext, setHostContext] = useState<McpUiHostContext | undefined>();
 //#gap
   // 🔨 3.4 Keep the host context in state: replace this line with a useState<McpUiHostContext | undefined>().
-  //    Then fill the two other 🔨 3.4 markers below, so it holds the first context and every change.
+  //    Then fill the two other 3.4 markers below, so it holds the first context and every change.
   // 🧠 McpUiHostContext is everything the host tells the view about where it is rendered: theme, styles,
   //    displayMode and availableDisplayModes, containerDimensions, locale, timeZone, safeAreaInsets, toolInfo.
   //    Every field is optional. Each host sends what it has.
@@ -114,13 +114,16 @@ export function ExpensifyApp() {
       // 🔨 3.3 Listen for 'toolresult', the server's answer. Read result.structuredContent:
       //      a summary (check with isSummary)       → setSummary(it), setGroupBy(it.groupBy), setEntry('summary')
       //      an expense list (check isExpenseList)  → setExpenses(it.expenses), setEntry('list')
+      //      neither (no structuredContent)          → setEntry('list') if the host's toolInfo names list_expenses,
+      //                                                otherwise setEntry('summary')
       //    Either way, setReady(true) at the end: that swaps the waiting message for the dashboard.
       // 💡 created.addEventListener('toolresult', (result) => { const data = result.structuredContent; ... })
+      // 💡 For the third branch: created.getHostContext()?.toolInfo?.tool.name === 'list_expenses'.
       // 🧠 A tool result has two halves. content is text for the model. structuredContent is data for code,
       //    shaped by the tool's outputSchema. The view renders from structuredContent and never parses the text.
       // 📡 ui/notifications/tool-result, host → view. Open it: it is the same result the server sent in tools/call.
-      // 🔥 Also listen for 'toolcancelled' (the user stopped the call) and setReady(true) there too.
       // 🧪 npm test sends a get_summary result and a list_expenses result, and checks what renders.
+      // 🔥 Also listen for 'toolcancelled' (the user stopped the call) and setReady(true) there too.
 //#end
 //#step 3.4
       // #done Theme, display mode, container size: the host sends only what changed.
@@ -177,6 +180,7 @@ export function ExpensifyApp() {
   // 📡 Switch the host theme preset: one host-context-changed carries the whole new set of variables.
   // 🧪 npm test checks useHostStyles gets the app and the context.
   // 📖 https://apps.extensions.modelcontextprotocol.io/api/modules/_modelcontextprotocol_ext-apps_react.html (useHostStyles)
+
 //#end
 //#step 5.2 given
   // Point tenet-ui's tokens at the host's variables (host-bridge.ts), and follow light and dark.
@@ -319,7 +323,7 @@ function Dashboard({ app, hostContext, entry, initial }: DashboardProps) {
 //#gap
   // 🔨 5.1 (part 2) Pad the dashboard by hostContext.safeAreaInsets ({ top, right, bottom, left }, in pixels),
   //    so nothing hides under a phone's notch or the host's own controls.
-  // 💡 { paddingTop: insets?.top, ... } for all four sides.
+  // 💡 const insets = hostContext?.safeAreaInsets; then { paddingTop: insets?.top, ... } for all four sides.
   const padding: CSSProperties = {};
 //#before
   const padding: CSSProperties = {};

@@ -16,7 +16,7 @@
 
 ## 📡 In the protocol log
 
-Switch the host theme preset (SDK basic, Claude-style, ChatGPT-style, none): one `host-context-changed` carries the whole new set of variables.
+Switch the host theme preset (SDK basic host, Claude-style, ChatGPT-style, No host styles): one `host-context-changed` carries the whole new set of variables.
 
 ## What breaks without it
 

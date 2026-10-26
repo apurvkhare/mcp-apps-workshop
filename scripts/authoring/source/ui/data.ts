@@ -39,7 +39,8 @@ export async function getSummary(app: App, range: DateRange, groupBy: GroupBy): 
   // 🔨 4.1 Call the get_summary tool from the view, with the range and groupBy as its arguments.
   //    Throw if the result is an error or has no summary in it. Otherwise return the summary.
   // 💡 const result = await app.callServerTool({ name, arguments: clean({ ...range, groupBy }) })
-  //    then check result.isError and isSummary(result.structuredContent).
+  //    then check result.isError and isSummary(result.structuredContent). If either fails,
+  //    throw new Error(textOf(result)): the result's text is the message.
   // 🧠 The view has no connection to the server. callServerTool asks the host, the host decides whether
   //    to allow it, then makes an ordinary tools/call. To the server, it looks like any other call.
   // 📡 Change the date range in the view: tools/call view → host, then host → server, then both results back.
@@ -51,6 +52,7 @@ export async function getSummary(app: App, range: DateRange, groupBy: GroupBy): 
 export async function listExpenses(app: App, range: DateRange, filter: TableFilter): Promise<Expense[]> {
   // 🔨 4.1 (part 2) The same for list_expenses: arguments are the range, the filter and limit: 50.
   //    Return result.structuredContent.expenses. isExpenseList checks the shape.
+  // 💡 Throw new Error(textOf(result)) if result.isError or isExpenseList(result.structuredContent) is false.
   //    The Toolbar, the "Show the expenses" link and a click on a bar all end up here.
   throw new Error('listExpenses is not written yet (step 4.1).');
 }

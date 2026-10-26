@@ -6,7 +6,7 @@ This folder is the finished step. Every ✅ comment in the code marks work from 
 
 **Where:** `server/server.ts`: the 2.1 change, under "resources".
 
-**📡 In the protocol log:** Nothing in the workshop host yet: no tool points at the view, so the host never asks for it. To see it now, run `npm run inspect` (MCP Inspector) and open Resources: `ui://expensify/dashboard.html` is listed, and reading it returns the HTML.
+**📡 In the protocol log:** The host's `resources/list` at connect already lists `ui://expensify/dashboard.html`, but nothing reads it yet: no tool points at the view, so the host never asks for it. To see it now, run `npm run inspect` (MCP Inspector) and open Resources: `ui://expensify/dashboard.html` is listed, and reading it returns the HTML.
 
 ## Explain it back
 

@@ -19,7 +19,7 @@ export const TOKEN_MAP: Record<string, McpUiStyleVariableKey> = {
   '--fgColor-accent': '--color-text-info',
   '--fgColor-danger': '--color-text-danger',
   '--borderColor-default': '--color-border-primary',
-  '--borderColor-muted': '--color-border-secondary'
+  '--borderColor-muted': '--color-border-secondary',
   // 🔨 5.2 Colors are done. Add the fonts and corner radii: --fontFamily-body, --fontFamily-mono,
   //    --borderRadius-medium and --borderRadius-large, each pointing at the host variable that means the same thing.
   // 💡 The host's names autocomplete here: they are the McpUiStyleVariableKey type. Look for --font-* and --border-radius-*.

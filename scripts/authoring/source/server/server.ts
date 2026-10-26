@@ -59,7 +59,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
 //#gap
   // 🔨 2.2 Make get_summary an app tool, so a host renders the view under its result.
   //    Two edits: swap server.registerTool('get_summary', ...) for registerAppTool(server, 'get_summary', ...),
-  //    then fill the second 🔨 2.2 marker, inside the config below.
+  //    then fill the second 2.2 marker, inside the config below.
   // 💡 registerAppTool(server, name, config, handler): the same arguments as registerTool, with server first.
   // 🧠 registerAppTool is registerTool plus one convenience: it also copies resourceUri to the older
   //    flat key _meta["ui/resourceUri"], which hosts built before the spec settled still read.
@@ -95,7 +95,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
       //    (Add a comma after the annotations line above.)
       // 🧠 The tool result stays the same. The link lives on the tool, in tools/list, so a host knows
       //    which view to fetch before the tool even runs.
-      // 📡 Call get_summary in the host: resources/read for ui://expensify/dashboard.html follows tools/call.
+      // 📡 Reload the workshop host page (it reads tools/list once, when it loads), then call get_summary:
+      //    resources/read for ui://expensify/dashboard.html follows tools/call.
       // 🧪 npm test lists the tools and checks get_summary's _meta.ui.resourceUri.
 //#before
       annotations: { readOnlyHint: true, idempotentHint: true }
@@ -187,7 +188,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
   // 🧠 Visibility is a promise from the host, not a lock: the host leaves the tool out of what the model
   //    sees, and only lets this server's own view call it. The handler below still checks its input,
   //    exactly as it would for a call from the model.
-  // 📡 In the host, the tool picker no longer offers delete_expense. Click Delete in the view instead:
+  // 📡 Reload the workshop host page (it reads tools/list once, when it loads). The tool picker no longer
+  //    offers delete_expense. Click Delete in the view instead:
   //    tools/call from the view to the host, then from the host to the server.
   // 🧪 npm test checks visibility in tools/list, and that the view calls delete_expense.
   server.registerTool(
@@ -244,13 +246,13 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
           //    (Add a comma after the text line above.)
           // 💡 The stylesheet comes from https://fonts.googleapis.com and the font files from https://fonts.gstatic.com.
           // 🧠 A host builds the view's Content-Security-Policy from this list and nothing else. Leave it out
-          //    and the view can load nothing from the network: no fonts, no images, no fetch().
+          //    and the view can load nothing from any other origin: no fonts, no images, no fetch().
           //    resourceDomains covers scripts, styles, images and fonts. connectDomains covers fetch and WebSocket.
           // 📡 Before: a workshop/csp-violation from the view, naming the blocked URL. After: none.
-          // 🔥 Also set prefersBorder: false in the same ui object. The dashboard draws its own cards,
-          //    so it asks the host not to add a border around the frame.
           // 🧪 npm test reads the resource and checks the CSP lists both origins.
           // 📖 https://apps.extensions.modelcontextprotocol.io/api/modules/app-bridge.html (McpUiResourceCsp)
+          // 🔥 Also set prefersBorder: false in the same ui object. The dashboard draws its own cards,
+          //    so it asks the host not to add a border around the frame.
 //#before
           text: await viewHtml()
 //#end
@@ -267,7 +269,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
   // 🧠 The view is a resource, not part of the tool result, so a host can fetch it ahead of time, cache it,
   //    and review it before anything runs. The MIME type "text/html;profile=mcp-app" is how a host knows
   //    this HTML is an MCP App to render in a sandbox, not a page to show as text.
-  // 📡 Nothing yet: no tool points at the view, so no host asks for it. Step 2.2 changes that.
+  // 📡 resources/list at connect already lists ui://expensify/dashboard.html, but nothing reads it yet:
+  //    no tool points at the view, so no host asks for it. Step 2.2 changes that.
   // 🧪 npm test reads ui://expensify/dashboard.html and checks its MIME type and HTML.
   // 📖 https://apps.extensions.modelcontextprotocol.io/api/modules/server-helpers.html
 //#end

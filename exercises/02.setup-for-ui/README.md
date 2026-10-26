@@ -10,7 +10,8 @@ MCP Apps adds exactly two things to an MCP server: **a resource holding the view
 By the end, calling `get_summary` in the workshop host renders the view. It only says "Waiting for the host…" for now: it doesn't know how to talk yet.
 
 ```
- server ──── tools/call, resources/read ────▶ host ──── renders ────▶ view (sandboxed iframe)
+ host ──── tools/call, resources/read ────▶ server
+ host ──── renders ────▶ view (sandboxed iframe)
 ```
 
 Start with `npm run go 2.1`.

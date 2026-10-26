@@ -134,7 +134,8 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
   // 🧠 Visibility is a promise from the host, not a lock: the host leaves the tool out of what the model
   //    sees, and only lets this server's own view call it. The handler below still checks its input,
   //    exactly as it would for a call from the model.
-  // 📡 In the host, the tool picker no longer offers delete_expense. Click Delete in the view instead:
+  // 📡 Reload the workshop host page (it reads tools/list once, when it loads). The tool picker no longer
+  //    offers delete_expense. Click Delete in the view instead:
   //    tools/call from the view to the host, then from the host to the server.
   // 🧪 npm test checks visibility in tools/list, and that the view calls delete_expense.
   server.registerTool(

@@ -166,13 +166,13 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
           //    (Add a comma after the text line above.)
           // 💡 The stylesheet comes from https://fonts.googleapis.com and the font files from https://fonts.gstatic.com.
           // 🧠 A host builds the view's Content-Security-Policy from this list and nothing else. Leave it out
-          //    and the view can load nothing from the network: no fonts, no images, no fetch().
+          //    and the view can load nothing from any other origin: no fonts, no images, no fetch().
           //    resourceDomains covers scripts, styles, images and fonts. connectDomains covers fetch and WebSocket.
           // 📡 Before: a workshop/csp-violation from the view, naming the blocked URL. After: none.
-          // 🔥 Also set prefersBorder: false in the same ui object. The dashboard draws its own cards,
-          //    so it asks the host not to add a border around the frame.
           // 🧪 npm test reads the resource and checks the CSP lists both origins.
           // 📖 https://apps.extensions.modelcontextprotocol.io/api/modules/app-bridge.html (McpUiResourceCsp)
+          // 🔥 Also set prefersBorder: false in the same ui object. The dashboard draws its own cards,
+          //    so it asks the host not to add a border around the frame.
         }
       ]
     })

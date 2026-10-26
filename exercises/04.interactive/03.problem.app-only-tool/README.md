@@ -16,7 +16,7 @@ The Delete buttons are already wired in `mcp-app.tsx`. They call `deleteExpense`
 
 ## 📡 In the protocol log
 
-The host's tool picker (which plays the model) no longer offers `delete_expense`. Click Delete on a row: `tools/call` from the view, then to the server, then a `get_summary` and a `list_expenses` to refresh.
+Reload the workshop host page (it reads `tools/list` once, when it loads), then look at the tool picker (which plays the model): it no longer offers `delete_expense`. Click Delete on a row: `tools/call` from the view, then to the server, then a `get_summary` and a `list_expenses` to refresh.
 
 ## What breaks without it
 
@@ -24,7 +24,7 @@ The model can delete expenses, and the Delete buttons fail.
 
 ## 🧪 Check it
 
-`npm test`. In the host, show the expenses and delete one: the totals drop.
+`npm test`. Reload the workshop host page, then show the expenses and delete one: the totals drop.
 
 ## Explain it back
 

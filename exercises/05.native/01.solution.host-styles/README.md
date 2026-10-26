@@ -6,7 +6,7 @@ This folder is the finished step. Every ✅ comment in the code marks work from 
 
 **Where:** `ui/mcp-app.tsx`: the 5.1 change in `ExpensifyApp` and the 5.1 change in `Dashboard`.
 
-**📡 In the protocol log:** Switch the host theme preset (SDK basic, Claude-style, ChatGPT-style, none): one `host-context-changed` carries the whole new set of variables.
+**📡 In the protocol log:** Switch the host theme preset (SDK basic host, Claude-style, ChatGPT-style, No host styles): one `host-context-changed` carries the whole new set of variables.
 
 ## Explain it back
 

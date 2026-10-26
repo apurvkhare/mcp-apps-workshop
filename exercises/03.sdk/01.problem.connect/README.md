@@ -26,7 +26,7 @@ No handshake, so the host never sends the input or the result. The view says "Wa
 
 ## 🧪 Check it
 
-`npm test`. In the host, call `get_summary`: the view now says "Connected. Waiting for the result…".
+`npm test`. In the host, call `get_summary`: the view now shows a message starting "Connected. Waiting for the result".
 
 ## Explain it back
 

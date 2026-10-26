@@ -6,7 +6,7 @@
 
 ## 🧠 How it works
 
-**The sandbox is closed by default.** A host renders the view in a sandboxed iframe and gives it a Content-Security-Policy built from the resource's `_meta.ui.csp`, and nothing else. Without a declaration, the view can load nothing from the network.
+**The sandbox is closed by default.** A host renders the view in a sandboxed iframe and gives it a Content-Security-Policy built from the resource's `_meta.ui.csp`, and nothing else. Without a declaration, the view can load nothing from any other origin.
 
 **The fields:**
 - `resourceDomains`: scripts, styles, images, fonts and media
@@ -24,11 +24,11 @@
 
 ## 📡 In the protocol log
 
-Before the fix: `workshop/csp-violation` from the view, naming `fonts.googleapis.com`. That message isn't part of MCP: the workshop host reports violations so you can see them. After the fix: none, and the dashboard headings switch to Newsreader.
+Before the fix: `workshop/csp-violation` from the view, naming `fonts.googleapis.com`. That message isn't part of MCP: the workshop host reports violations so you can see them. After the fix: none, and the dashboard headings switch to Newsreader. Offline, the violation still goes away, but the font itself only loads with internet.
 
 ## What breaks without it
 
-The headings fall back to Georgia, and the view logs a CSP violation every time it loads.
+The headings fall back to the system serif (Iowan Old Style or Georgia), and the view logs a CSP violation every time it loads.
 
 ## 🧪 Check it
 
