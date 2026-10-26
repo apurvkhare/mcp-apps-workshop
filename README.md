@@ -67,7 +67,7 @@ Every command is non-interactive. Add `-- --json` for JSON output, for example `
 | `npm run inspect` | MCP Inspector, pointed at the running server |
 | `npm run doctor` | Check this machine is ready |
 | `npm run deploy` | Build the view and deploy the playground's server to Cloudflare Workers (needs a free account; see [DEPLOY.md](DEPLOY.md)). `-- --app app` deploys the finished app |
-| `npm run smoke` | Call every tool, resource and prompt on the running server, like a host would |
+| `npm run smoke` | Call every tool, resource and prompt on the running server, like a host would. Add `-- https://…/mcp` to check a deployed server |
 
 For workshop authors: `npm run cut` regenerates every exercise folder and `app/` from `scripts/authoring/source/`, and `npm run verify` checks every step: typecheck, tests, markers and builds.
 

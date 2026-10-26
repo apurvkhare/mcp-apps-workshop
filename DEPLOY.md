@@ -32,7 +32,7 @@ https://expensify-mcp-app.<your-subdomain>.workers.dev
 
 **Your MCP server is that URL plus `/mcp`.** The rest of this page calls it `YOUR_URL`.
 
-Want to try the Worker before deploying? `npx wrangler dev app/server/worker.ts` runs it locally, in the same runtime, at `http://localhost:8787/mcp`. To check the bundle without uploading anything, run `npm run deploy -- --dry-run`.
+Want to try the Worker before deploying? `APP_DIR=app npx vite build && npx wrangler dev app/server/worker.ts` builds the view and runs the Worker locally, in the same runtime, at `http://localhost:8787/mcp`. To check the bundle without uploading anything, run `npm run deploy -- --app app --dry-run` (or `npm run deploy -- --dry-run` once your playground is on 6.1).
 
 ## 2. Check it in the workshop host
 
@@ -81,7 +81,7 @@ Add `.vscode/mcp.json` to the workspace:
 }
 ```
 
-Start the server from the file, or with **MCP: List Servers**, then ask in Copilot Chat in agent mode. VS Code can also use `http://localhost:3001/mcp` directly while `npm start` is running. MCP Apps rendering is experimental in VS Code.
+Start the server from the file, or with **MCP: List Servers**, then ask in Copilot Chat in agent mode. VS Code can also use `http://localhost:3001/mcp` directly while `npm start` is running. VS Code renders MCP Apps in Copilot Chat since early 2026. On an older version, update first.
 
 ### Claude Code
 
@@ -89,7 +89,7 @@ Start the server from the file, or with **MCP: List Servers**, then ask in Copil
 claude mcp add --transport http expensify YOUR_URL
 ```
 
-The Claude Code tool calls work in a terminal. Whether it renders the view, and not just the text, is to be checked in the dry run.
+In Claude Code the tools work in the terminal, and you get the text answer. The view needs a host that renders MCP Apps.
 
 ## Taking it further
 

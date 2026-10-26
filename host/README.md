@@ -23,16 +23,11 @@ This basic host can also be used to test MCP Apps during local development.
 
 ## Getting Started
 
-```bash
-npm install
-npm run start
-# Open http://localhost:8080
-```
-
-By default, the host application will try to connect to an MCP server at `http://localhost:3001/mcp`. You can configure this behavior by setting the `SERVERS` environment variable with a JSON array of server URLs:
+Workshop: run it from the repo root. There is no separate `host/` package.
 
 ```bash
-SERVERS='["http://localhost:1234/mcp", "http://localhost:5678/mcp"]' npm run start
+npm start                       # the playground's server and this host, on http://localhost:8080
+npm start -- --server URL       # only this host, connected to a server somewhere else
 ```
 
 ## Architecture

@@ -19,7 +19,7 @@ When the person says "do step 3.3", or `/step 3.3`:
 1. `npm run status -- --json --no-test`. If the playground isn't on 3.3, run `npm run go 3.3 -- --json`. It backs up the old playground first, so this is safe. If `backup` isn't null, mention its path.
 2. Read `playground/README.md`.
 3. Find the work: the `todo` list from `status`, or `grep -rn "🔨" playground --exclude-dir=tests --exclude=README.md`.
-4. Fill each 🔨 marker. Replace the whole marker block, meaning the 🔨 line and the 💡 🧠 📡 🧪 📖 lines under it, with the code, the way a finished step looks. Where a marker says to replace a stub line (such as `const app = null as App | null;`), replace it. Keep ✅ lines: they mark earlier work.
+4. Fill each 🔨 marker. Replace the whole marker block, meaning the 🔨 line and the 💡 🧠 📡 🧪 📖 lines under it, with the code, the way a finished step looks. Leave 🔥 lines in place. Where a marker says to replace a stub line (such as `const app = null as App | null;`), replace it. Keep ✅ lines: they mark earlier work.
 5. `npm test -- --json`. If something fails, read the failure message, fix it, and run it again.
 6. `npm run status -- --json --no-test` should show no 🔨 left.
 7. Answer "Explain it back" (rule 6). Then suggest they run `npm start` (if it isn't running already), call the tool in the workshop host, and read the traffic the 📡 section describes.
