@@ -2,7 +2,7 @@
 
 Hands-on workshop material for **MCP Apps with React** (React India). You build Expensify, an expense tracker in INR, as an MCP server with a React dashboard that renders inside Claude, ChatGPT, VS Code and other MCP Apps hosts.
 
-> Work in progress. The reference app, the workshop host, the exercises and the agent setup are in place. The slides are in `slides/`. Handouts come next.
+> Work in progress. The reference app, the workshop host, the exercises and the agent setup are in place. Handouts come next.
 
 ## Setup
 
@@ -85,5 +85,4 @@ For workshop authors: `npm run cut` regenerates every exercise folder and `app/`
 | `app/ui/host-bridge.ts` | Maps the host's theme variables onto tenet-ui tokens |
 | `shared/` | The expense store, the presentational components, and test helpers. Not MCP code, shared by every step |
 | `host/` | The workshop host, based on the official SDK's `basic-host` example, with the step's guide, a protocol log, a conversation pane and theme presets |
-| `slides/` | The presenter deck (Slidev), with speaker notes. Its own install: `cd slides && npm install && npm run dev` |
 | `scripts/` | The commands above. `scripts/authoring/` holds the source every step is cut from |
