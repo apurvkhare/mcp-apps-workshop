@@ -372,6 +372,8 @@ function ServerSelect({ serversPromise, onSelect, initialServer, initialTool, au
   const servers = use(serversPromise);
   const [hasInitialized, setHasInitialized] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // Workshop: StrictMode runs this effect twice in the development build; call the tool once.
+  const autoCalledRef = useRef(false);
 
   // Initialize with the correct server/tool when servers are loaded
   useEffect(() => {
@@ -399,7 +401,8 @@ function ServerSelect({ serversPromise, onSelect, initialServer, initialTool, au
     setHasInitialized(true);
 
     // Auto-call after initial selection if requested
-    if (autoCall && targetTool) {
+    if (autoCall && targetTool && !autoCalledRef.current) {
+      autoCalledRef.current = true;
       onAutoCall?.(server, targetTool);
     }
   }, [servers, hasInitialized, initialServer, initialTool, autoCall, onSelect, onAutoCall]);

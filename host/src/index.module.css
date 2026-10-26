@@ -572,6 +572,13 @@
   color: var(--color-text-secondary);
 }
 
+.logId {
+  max-width: 6ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .logMethod {
   overflow-wrap: anywhere;
 

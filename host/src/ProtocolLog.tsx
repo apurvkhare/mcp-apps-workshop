@@ -80,7 +80,8 @@ export function ProtocolLog() {
                 {e.kind === "response" && <em> result</em>}
                 {e.kind === "error" && <em> error</em>}
               </span>
-              {e.id !== undefined && <span className={styles.logId}>#{String(e.id)}</span>}
+              {/* Workshop: string ids such as "server-discover-probe-1" are cut short; hover for the full id. */}
+              {e.id !== undefined && <span className={styles.logId} title={`#${String(e.id)}`}>#{String(e.id)}</span>}
             </button>
             {open === e.seq && (
               <pre className={styles.logJson}>
