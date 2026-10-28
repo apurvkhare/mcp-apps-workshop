@@ -204,7 +204,7 @@ function Dashboard({ app, hostContext, entry, initial }: DashboardProps) {
 
   // 🔨 5.1 (part 2) Pad the dashboard by hostContext.safeAreaInsets ({ top, right, bottom, left }, in pixels),
   //    so nothing hides under a phone's notch or the host's own controls.
-  // 💡 const insets = hostContext?.safeAreaInsets; then { paddingTop: insets?.top, ... } for all four sides.
+  // 💡 Replace the line below: const insets = hostContext?.safeAreaInsets; then { paddingTop: insets?.top, ... } for all four sides.
   const padding: CSSProperties = {};
 
   return (

@@ -104,7 +104,7 @@ export function createServer({ store, viewHtml }: ServerDeps): McpServer {
     },
     async (args) => {
       const summary = store.summary(args);
-      const lines = summary.groups.map((g) => `${g.key.padEnd(14)} ${formatINR(g.total).padStart(10)}  (${g.count})`);
+      const lines = summary.groups.map((g) => `${g.key.padEnd(18)} ${formatINR(g.total).padStart(10)}  (${g.count})`);
       return {
         // content is for the model: plain text it can reason about and quote.
         content: [{ type: 'text', text: [`Total ${formatINR(summary.total)} across ${summary.count} expenses`, ...lines].join('\n') }],

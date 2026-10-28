@@ -26,7 +26,7 @@ npm run doctor
 
 ### If npm warns about install scripts
 
-npm may list packages such as `esbuild` and `workerd` whose install scripts it didn't run. The workshop works without them, and `doctor` passing confirms that. If `doctor` fails on "Builds the view", run `npm install-scripts approve esbuild`, then `npm install` again.
+npm may list packages such as `esbuild`, `workerd` and `@modelcontextprotocol/inspector` whose install scripts it didn't run. The workshop works without them, and `doctor` passing confirms that. If `doctor` fails on "Builds the view", run `npm install-scripts approve esbuild`, then `npm install` again.
 
 npm may also print audit vulnerabilities and deprecation warnings. They come from dev tools, and `doctor` passing means you can ignore them.
 

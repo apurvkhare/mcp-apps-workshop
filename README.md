@@ -2,7 +2,7 @@
 
 Hands-on workshop material for **MCP Apps with React** (React India). You build Expensify, an expense tracker in INR, as an MCP server with a React dashboard that renders inside Claude, ChatGPT, VS Code and other MCP Apps hosts.
 
-Everything is here: 14 steps across six sections, the finished app, a local workshop host with a live protocol log, and the setup for working with an AI agent. Once installed, sections 1 to 5 work offline; only deploying needs internet. Do it in the room, or on your own at your own pace.
+Everything is here: 14 steps across seven sections, the finished app, a local workshop host with a live protocol log, and the setup for working with an AI agent. Once installed, sections 1 to 5 work offline; only deploying needs internet. Do it in the room, or on your own at your own pace.
 
 It uses `@modelcontextprotocol/ext-apps` 2.0.3, the MCP TypeScript SDK 2.3.1 (protocol 2026-07-28), React 19 and Vite.
 
@@ -16,8 +16,7 @@ It uses `@modelcontextprotocol/ext-apps` 2.0.3, the MCP TypeScript SDK 2.3.1 (pr
 | 4 · Make it interactive | Call server tools from the view, send a chat message, delete with an app-only tool, tell the model what changed | 4.1 to 4.4 |
 | 5 · Make it look native | Apply the host's styles, map a design system onto them, load a web font through the CSP | 5.1 to 5.3 |
 | 6 · Deploy it | Run the same server on Cloudflare Workers | 6.1 |
-
-Then plug the deployed URL into Claude, ChatGPT or VS Code: [DEPLOY.md](DEPLOY.md) has the steps for each.
+| 7 · One app, every host | Plug the deployed URL into Claude, ChatGPT or VS Code. A demo in the room; [DEPLOY.md](DEPLOY.md) has the steps for each | – |
 
 ## Setup
 
@@ -82,7 +81,7 @@ Every command is non-interactive. Add `-- --json` for JSON output, for example `
 | `npm run inspect` | MCP Inspector, pointed at the running server |
 | `npm run doctor` | Check this machine is ready |
 | `npm run deploy` | Build the view and deploy the playground's server to Cloudflare Workers (needs a free account; see [DEPLOY.md](DEPLOY.md)). `-- --app app` deploys the finished app |
-| `npm run smoke` | Call every tool, resource and prompt on the running server, like a host would. Add `-- https://…/mcp` to check a deployed server |
+| `npm run smoke` | Call every tool, resource and prompt on the running server, like a host would. Add `-- https://…/mcp` to check a deployed server. It checks the finished app, so on an earlier step the checks marked with a later step fail |
 
 For workshop authors: `npm run cut` regenerates every exercise folder and `app/` from `scripts/authoring/source/`, and `npm run verify` checks every step: typecheck, tests, markers and builds.
 

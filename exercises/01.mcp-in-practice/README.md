@@ -14,16 +14,16 @@ Then, in a second terminal:
 npm run inspect
 ```
 
-Inspector starts on `http://127.0.0.1:6274`, already pointed at `http://localhost:3001/mcp`. If your browser doesn't open by itself, open the full URL it prints (it includes a token). Press **Connect**.
+Inspector starts on `http://127.0.0.1:6274`, already pointed at `http://localhost:3001/mcp`. If your browser doesn't open by itself, open the full URL it prints (it includes a token). Turn on the switch next to `localhost:3001`: it says **Connected** and `MCP 2026-07-28`.
 
 ## Follow along
 
 1. **Tools.** List them, then call `get_summary` with `{ "groupBy": "category" }`. Look at the result: `content` (text) and `structuredContent` (data).
 2. **Resources.** Read `expenses://categories`.
 3. **Prompts.** Get `monthly_review`, with and without a `month`.
-4. **History.** Open each request and its response. Find the `id` that pairs them.
+4. **Protocol.** In the **Protocol** pane on the right, the **Messages** list has every message. Find `server/discover` first, then open each request and its response, and find the `id` that pairs them.
 
-📡 You should see `tools/list`, `tools/call`, `resources/read` and `prompts/get`, each with a request and a response.
+📡 You should see `server/discover`, then `tools/list`, `tools/call`, `resources/read` and `prompts/get`, each with a request and a response.
 
 ## 🧠 What to take from it
 

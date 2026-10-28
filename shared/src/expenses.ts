@@ -150,12 +150,24 @@ function demoExpenses(today: string): ExpenseInput[] {
 }
 
 export class ExpenseStore {
-  private rows: Expense[];
-  private nextId: number;
+  private readonly today: string | undefined;
+  private data: { rows: Expense[]; nextId: number } | undefined;
 
-  constructor(today = todayIST()) {
-    this.rows = demoExpenses(today).map((e, i) => ({ id: `e${i + 1}`, ...e }));
-    this.nextId = this.rows.length + 1;
+  constructor(today?: string) {
+    this.today = today;
+  }
+
+  /** Built on first use, not in the constructor: a Worker creates the store at startup, when its clock still reads 1970. */
+  private get state() {
+    if (!this.data) {
+      const rows = demoExpenses(this.today ?? todayIST()).map((e, i) => ({ id: `e${i + 1}`, ...e }));
+      this.data = { rows, nextId: rows.length + 1 };
+    }
+    return this.data;
+  }
+
+  private get rows() {
+    return this.state.rows;
   }
 
   private match(f: ListFilter): Expense[] {
@@ -164,7 +176,7 @@ export class ExpenseStore {
       .filter((e) => (!f.from || e.date >= f.from) && (!f.to || e.date <= f.to))
       .filter((e) => !f.category || e.category === f.category)
       .filter((e) => !merchant || e.merchant.toLowerCase().includes(merchant))
-      .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+      .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id, 'en', { numeric: true }));
   }
 
   list(f: ListFilter = {}): Expense[] {
@@ -198,7 +210,7 @@ export class ExpenseStore {
   }
 
   add(input: ExpenseInput): Expense {
-    const expense: Expense = { id: `e${this.nextId++}`, ...ExpenseInput.parse(input) };
+    const expense: Expense = { id: `e${this.state.nextId++}`, ...ExpenseInput.parse(input) };
     this.rows.push(expense);
     return expense;
   }
