@@ -2,7 +2,22 @@
 
 Hands-on workshop material for **MCP Apps with React** (React India). You build Expensify, an expense tracker in INR, as an MCP server with a React dashboard that renders inside Claude, ChatGPT, VS Code and other MCP Apps hosts.
 
-> Work in progress. The reference app, the workshop host, the exercises and the agent setup are in place. Handouts come next.
+Everything is here: 14 steps across six sections, the finished app, a local workshop host with a live protocol log, and the setup for working with an AI agent. Once installed, sections 1 to 5 work offline; only deploying needs internet. Do it in the room, or on your own at your own pace.
+
+It uses `@modelcontextprotocol/ext-apps` 2.0.3, the MCP TypeScript SDK 2.3.1 (protocol 2026-07-28), React 19 and Vite.
+
+## The sections
+
+| Section | What you do | Steps |
+|---|---|---|
+| 1 · MCP in practice | Walk the running server in MCP Inspector: tools, a resource, a prompt, and the messages behind each. No code | – |
+| 2 · Setting up for UI | Serve the view as a `ui://` resource and link `get_summary` to it | 2.1, 2.2 |
+| 3 · Understand the SDK, then fill the gaps | Connect with `useApp`, read the tool input and result, follow the host context | 3.1 to 3.4 |
+| 4 · Make it interactive | Call server tools from the view, send a chat message, delete with an app-only tool, tell the model what changed | 4.1 to 4.4 |
+| 5 · Make it look native | Apply the host's styles, map a design system onto them, load a web font through the CSP | 5.1 to 5.3 |
+| 6 · Deploy it | Run the same server on Cloudflare Workers | 6.1 |
+
+Then plug the deployed URL into Claude, ChatGPT or VS Code: [DEPLOY.md](DEPLOY.md) has the steps for each.
 
 ## Setup
 
