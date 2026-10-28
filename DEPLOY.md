@@ -2,7 +2,7 @@
 
 Put the Expensify server on a public HTTPS URL with Cloudflare Workers, then add it to real hosts. This is section 6 and 7 of the workshop, and optional: everything before it runs on your laptop.
 
-**What you deploy has no login and only demo data.** Anyone with the URL can read and delete the 30 seeded expenses. Each Worker instance keeps its own copy in memory, and it resets whenever Cloudflare starts a fresh instance. That's fine for a workshop. Don't put real expenses in it. For the production version (OAuth 2.1, a real database), see the MCP Apps masterclass.
+**What you deploy has no login and only demo data.** Anyone with the URL can read and delete the demo expenses (three years of them, generated at startup). Each Worker instance keeps its own copy in memory, and it resets whenever Cloudflare starts a fresh instance. That's fine for a workshop. Don't put real expenses in it. For the production version (OAuth 2.1, a real database), see the MCP Apps masterclass.
 
 ## 1. Deploy to Workers
 

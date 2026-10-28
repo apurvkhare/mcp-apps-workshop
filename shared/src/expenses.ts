@@ -61,53 +61,100 @@ function shiftDays(iso: string, days: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** [daysAgo, category, merchant, amount, note?] */
-const SEED: [number, Category, string, number, string?][] = [
-  [0, 'food', 'Swiggy', 486],
-  [1, 'transport', 'Uber', 312],
-  [1, 'groceries', 'BigBasket', 2140],
-  [2, 'food', 'Third Wave Coffee', 380],
-  [3, 'bills', 'Airtel', 799, 'Postpaid'],
-  [4, 'entertainment', 'BookMyShow', 920, 'Two tickets'],
-  [5, 'food', 'Zomato', 642],
-  [6, 'shopping', 'Myntra', 2499],
-  [7, 'health', 'Apollo Pharmacy', 640],
-  [8, 'transport', 'Namma Metro', 120],
-  [9, 'groceries', 'Zepto', 865],
-  [11, 'food', 'Meghana Foods', 1150, 'Team lunch'],
-  [12, 'bills', 'BESCOM', 1830, 'Electricity'],
-  [14, 'travel', 'IndiGo', 6420, 'BLR to BOM'],
-  [15, 'transport', 'Rapido', 95],
-  [17, 'food', 'Swiggy', 530],
-  [19, 'shopping', 'Amazon', 1299],
-  [21, 'entertainment', 'Netflix', 649],
-  [23, 'groceries', 'BigBasket', 1960],
-  [26, 'food', 'Starbucks', 410],
-  [29, 'health', 'Cult.fit', 1999, 'Monthly pass'],
-  [33, 'bills', 'ACT Fibernet', 1180],
-  [36, 'travel', 'MakeMyTrip', 8900, 'Hotel, Mumbai'],
-  [38, 'food', 'Zomato', 720],
-  [41, 'transport', 'Uber', 540],
-  [44, 'shopping', 'Decathlon', 3150],
-  [47, 'groceries', 'Zepto', 1240],
-  [52, 'entertainment', 'Spotify', 119],
-  [55, 'food', 'Truffles', 860],
-  [60, 'bills', 'Airtel', 799, 'Postpaid']
-];
+/** A random number generator (mulberry32) seeded from a date: each day always gets the same expenses. */
+function random(date: string) {
+  let a = [...date].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261);
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Three years of believable spending for one person in Bengaluru, ending today: daily food and
+ * commutes, weekly groceries, monthly bills on fixed days, a few trips a year, and festive-season
+ * shopping. Each date is seeded on its own, so a new day adds rows and changes nothing before it.
+ * Oldest first, so ids follow time and an added expense continues the count.
+ */
+function demoExpenses(today: string): ExpenseInput[] {
+  let rand: () => number; // reseeded for each date below
+  const chance = (p: number) => rand() < p;
+  const pick = <T>(xs: readonly T[]): T => xs[Math.floor(rand() * xs.length)]!;
+  const between = (min: number, max: number, step = 1) => Math.round((min + rand() * (max - min)) / step) * step;
+
+  const rows: ExpenseInput[] = [];
+  const add = (date: string, category: Category, merchant: string, amount: number, note?: string) =>
+    rows.push({ date, category, merchant, amount, ...(note ? { note } : {}) });
+
+  const days = 3 * 365;
+  for (let ago = days; ago >= 0; ago--) {
+    const date = shiftDays(today, -ago);
+    rand = random(date);
+    const d = new Date(`${date}T00:00:00Z`);
+    const [day, month, weekday] = [d.getUTCDate(), d.getUTCMonth() + 1, d.getUTCDay()];
+    const weekend = weekday === 0 || weekday === 6;
+    // Tariffs go up over time: years before 2026 cost a little less.
+    const year = Math.min(3, Math.max(0, 2026 - d.getUTCFullYear()));
+    const festive = month === 10 || month === 11;
+
+    // Bills, on the same day each month
+    if (day === 1) add(date, 'health', 'Cult.fit', 1999 - year * 200, 'Monthly pass');
+    if (day === 3) add(date, 'bills', 'ACT Fibernet', 1180 - year * 80);
+    if (day === 5) add(date, 'bills', 'Airtel', [799, 799, 699, 599][year]!, 'Postpaid');
+    if (day === 8) add(date, 'entertainment', 'Spotify', 119);
+    if (day === 12) add(date, 'bills', 'BESCOM', between(month >= 3 && month <= 5 ? 2100 : 1250, month >= 3 && month <= 5 ? 2900 : 1900, 10), 'Electricity');
+    if (day === 15 && month % 2 === 0) add(date, 'bills', 'Indane', 905 - year * 50, 'LPG cylinder');
+    if (day === 21) add(date, 'entertainment', 'Netflix', 649);
+    if (day === 18 && month === 6) add(date, 'health', 'Star Health', 18_400 - year * 900, 'Health insurance, yearly');
+    if (day === 2 && month === 9) add(date, 'shopping', 'Amazon', 1499, 'Prime, yearly');
+
+    // Food: delivery most days, coffee, and eating out at weekends
+    if (chance(weekend ? 0.55 : 0.4)) add(date, 'food', pick(['Swiggy', 'Swiggy', 'Zomato', 'Zomato', 'EatSure']), between(220, 920));
+    if (chance(0.22)) add(date, 'food', pick(['Third Wave Coffee', 'Starbucks', 'Blue Tokai', 'Chai Point']), between(150, 520, 10));
+    if (weekend && chance(0.35)) add(date, 'food', pick(['Meghana Foods', 'Truffles', 'Toit', 'MTR', 'Empire', 'Nagarjuna']), between(600, 2800, 10));
+    if (!weekend && chance(0.04)) add(date, 'food', pick(['Meghana Foods', 'Nagarjuna', 'Truffles']), between(1800, 4200, 10), 'Team lunch');
+
+    // Getting around on workdays
+    if (!weekend && chance(0.55)) add(date, 'transport', pick(['Uber', 'Uber', 'Ola', 'Rapido', 'Namma Metro']), between(60, 620));
+    if (weekend && chance(0.3)) add(date, 'transport', pick(['Uber', 'Rapido']), between(90, 480));
+    if (chance(0.05)) add(date, 'transport', 'HP Petrol', between(1000, 2500, 100), 'Fuel');
+
+    // Groceries: a big Sunday shop, and quick top-ups
+    if (weekday === 0 && chance(0.8)) add(date, 'groceries', 'BigBasket', between(1400, 3600, 10));
+    if (chance(0.22)) add(date, 'groceries', pick(['Zepto', 'Blinkit', 'Swiggy Instamart']), between(180, 1400));
+
+    // Now and then
+    if (chance(festive ? 0.14 : 0.05)) {
+      add(date, 'shopping', pick(['Amazon', 'Flipkart', 'Myntra', 'Decathlon', 'IKEA', 'Croma', 'Nykaa']), between(399, festive ? 14_000 : 6000, 10), festive && chance(0.4) ? 'Diwali sale' : undefined);
+    }
+    if (chance(weekend ? 0.1 : 0.03)) add(date, 'entertainment', pick(['BookMyShow', 'BookMyShow', 'PVR INOX', 'Smaaash']), between(350, 1600, 10));
+    if (chance(0.035)) add(date, 'health', pick(['Apollo Pharmacy', 'Apollo Pharmacy', 'PharmEasy', 'Practo']), between(150, 1500, 10));
+
+    // A trip every couple of months: getting there, then somewhere to stay
+    if (chance(1 / 60) || (festive && day === 28 && month === 10)) {
+      const [place, merchant, fare] = pick([
+        ['Mumbai', 'IndiGo', [4200, 9500]],
+        ['Delhi', 'Air India', [5200, 11_000]],
+        ['Goa', 'IndiGo', [3500, 8000]],
+        ['Chennai', 'IRCTC', [700, 1900]],
+        ['Mysuru', 'IRCTC', [300, 900]],
+        ['Hyderabad', 'Akasa Air', [3200, 7000]]
+      ] as const);
+      add(date, 'travel', merchant, between(fare[0], fare[1], 10), `BLR to ${place}`);
+      if (chance(0.8)) add(date, 'travel', pick(['MakeMyTrip', 'Booking.com', 'OYO', 'Airbnb']), between(2800, 16_000, 100), `Hotel, ${place}`);
+    }
+  }
+  return rows;
+}
 
 export class ExpenseStore {
   private rows: Expense[];
   private nextId: number;
 
   constructor(today = todayIST()) {
-    this.rows = SEED.map(([daysAgo, category, merchant, amount, note], i) => ({
-      id: `e${i + 1}`,
-      date: shiftDays(today, -daysAgo),
-      category,
-      merchant,
-      amount,
-      ...(note ? { note } : {})
-    }));
+    this.rows = demoExpenses(today).map((e, i) => ({ id: `e${i + 1}`, ...e }));
     this.nextId = this.rows.length + 1;
   }
 
