@@ -6,6 +6,8 @@ Everything is here: 14 steps across seven sections, the finished app, a local wo
 
 It uses `@modelcontextprotocol/ext-apps` 2.0.3, the MCP TypeScript SDK 2.3.1 (protocol 2026-07-28), React 19 and Vite.
 
+**Slides:** [mcp-apps-workshop-slides.apurvkhare.workers.dev](https://mcp-apps-workshop-slides.apurvkhare.workers.dev)
+
 ## The sections
 
 | Section | What you do | Steps |
